@@ -11,6 +11,9 @@
   --text-color: #111827;
   --muted-text: #6b7280;
   --card-bg: rgba(255,255,255,0.8);
+  /* Performance tweaks */
+  --btn-transition: 0.18s;
+  --shadow-elevation: 0 12px 30px rgba(2,6,23,0.08);
 }
 
 /* Dark theme overrides */
