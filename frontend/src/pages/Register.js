@@ -86,8 +86,8 @@ function Register() {
       </div>
 
       <div className="auth-right-panel">
-        <h2>Sign Up</h2>
-        
+        <h2>Create your account</h2>
+        <p className="subtitle">Join the Game and level up your shopping experience</p>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleRegister}>
@@ -139,8 +139,8 @@ function Register() {
             />
           </div>
 
-          <button type="submit" className="gradient-btn" disabled={loading}>
-            {loading ? 'Creating account...' : 'Register →'}
+          <button type="submit" className="gradient-btn" disabled={loading} aria-label="Create GamerX account">
+            {loading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
 

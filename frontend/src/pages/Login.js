@@ -53,8 +53,8 @@ function Login({ setIsAuthenticated }) {
       </div>
 
       <div className="auth-right-panel">
-        <h2>Sign In</h2>
-        
+        <h2>Holla, <br/>Welcome Back</h2>
+        <p className="subtitle">Hey, welcome back to your special place</p>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleLogin}>
@@ -80,8 +80,8 @@ function Login({ setIsAuthenticated }) {
             />
           </div>
 
-          <button type="submit" className="gradient-btn" disabled={loading}>
-            {loading ? 'Signing in...' : 'Continue →'}
+          <button type="submit" className="gradient-btn" disabled={loading} aria-label="Sign in to GamerX">
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
