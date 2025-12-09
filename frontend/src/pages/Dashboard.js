@@ -18,6 +18,10 @@ function Dashboard({ onLogout, isAuthenticated }) {
     }
   };
 
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
+
   const categories = [
     'All categories',
     'Mobile phones',
@@ -72,7 +76,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
         </div>
 
         <div className="navbar-right">
-          <button className="nav-icon-btn">
+          <button className="nav-icon-btn" onClick={handleCartClick}>
             <span>🛒</span>
             <span>My Cart</span>
           </button>

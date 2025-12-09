@@ -1,0 +1,271 @@
+/* Import Dashboard styles */
+@import './Dashboard.css';
+
+/* Cart Header */
+.cart-header {
+  margin-bottom: 30px;
+}
+
+.cart-header h1 {
+  font-size: 32px;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.cart-header p {
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Empty Cart */
+.empty-cart {
+  text-align: center;
+  padding: 80px 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-cart-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.empty-cart h2 {
+  color: #333;
+  margin: 0 0 10px 0;
+  font-size: 24px;
+}
+
+.empty-cart p {
+  color: #666;
+  margin: 0 0 30px 0;
+  font-size: 16px;
+}
+
+.continue-shopping-btn {
+  background: #5DADE2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.continue-shopping-btn:hover {
+  background: #3498db;
+}
+
+/* Cart Items */
+.cart-items {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  gap: 20px;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-details h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #1a1a1a;
+}
+
+.cart-item-category {
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+}
+
+.cart-item-price {
+  font-weight: 600;
+  color: #5DADE2;
+  font-size: 16px;
+}
+
+/* Quantity Controls */
+.cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.quantity-btn:hover {
+  background: #ccc;
+}
+
+.quantity-value {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Cart Item Total */
+.cart-item-total {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 16px;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Remove Button */
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.remove-btn:hover {
+  background: #ffeaea;
+}
+
+/* Cart Summary */
+.cart-summary {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.cart-summary-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+  border-top: 2px solid #333;
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.summary-row.total {
+  font-size: 20px;
+  color: #5DADE2;
+}
+
+/* Cart Actions */
+.cart-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.checkout-btn {
+  flex: 1;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+  background: #218838;
+}
+
+/* Active cart button */
+.nav-icon-btn.active {
+  color: #5DADE2;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .cart-item-quantity {
+    order: 2;
+  }
+
+  .cart-item-total {
+    order: 3;
+    text-align: left;
+  }
+
+  .remove-btn {
+    order: 4;
+    align-self: flex-end;
+  }
+
+  .cart-actions {
+    flex-direction: column;
+  }
+
+  .checkout-btn {
+    order: 1;
+  }
+}
