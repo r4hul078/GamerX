@@ -35,12 +35,3 @@ npm start
 
 Backend: `http://localhost:5000`
 Frontend: `http://localhost:3000`
-
-## Features
-
-- User Registration & Login (JWT)
-- Email Verification
-- Password Hashing (bcryptjs)
-- Role-based Access Control (User/Admin)
-- Protected Routes & Dashboard
-- Responsive Design
