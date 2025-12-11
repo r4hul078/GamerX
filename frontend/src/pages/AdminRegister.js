@@ -76,6 +76,7 @@ function AdminRegister() {
 
       <div className="auth-right-panel admin-panel">
         <h2>Admin Registration</h2>
+        <p className="subtitle">Create an admin account to manage products & orders</p>
 
         {error && <div className="error-message">{error}</div>}
 
@@ -123,6 +124,7 @@ function AdminRegister() {
               value={formData.password}
               onChange={handleChange}
               required
+              minLength={8}
             />
           </div>
 
@@ -134,12 +136,13 @@ function AdminRegister() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              minLength={8}
             />
           </div>
 
           {/* Admin secret removed */}
 
-          <button type="submit" className="btn-primary" disabled={loading}>
+          <button type="submit" className="gradient-btn" disabled={loading}>
             {loading ? 'Registering...' : 'Register as Admin'}
           </button>
         </form>

@@ -124,6 +124,7 @@ function Register() {
               value={formData.password}
               onChange={handleChange}
               required
+              minLength={8}
             />
           </div>
 
@@ -136,6 +137,7 @@ function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              minLength={8}
             />
           </div>
 
