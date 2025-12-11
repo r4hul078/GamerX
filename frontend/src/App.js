@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import AdminRegister from './pages/AdminRegister';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
+import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
 import './App.css';
 
@@ -61,6 +62,10 @@ function App() {
         <Route 
           path="/product/:id" 
           element={<ProductDetails />} 
+        />
+        <Route 
+          path="/cart" 
+          element={<Cart onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
         />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
