@@ -9,8 +9,6 @@ function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'user',
-    adminSecret: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -46,8 +44,7 @@ function Register() {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-        role: formData.role,
-        adminSecret: formData.adminSecret,
+        role: 'user',
       });
 
       // If backend returned a token (auto-verified or admin), log in
@@ -136,27 +133,6 @@ function Register() {
             />
           </div>
 
-          <div className="input-group">
-            <label>Role</label>
-            <select name="role" value={formData.role} onChange={handleChange}>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {formData.role === 'admin' && (
-            <div className="input-group">
-              <label>Admin Secret</label>
-              <input
-                type="password"
-                name="adminSecret"
-                placeholder="Enter admin secret"
-                value={formData.adminSecret}
-                onChange={handleChange}
-              />
-            </div>
-          )}
-
           <button type="submit" className="gradient-btn" disabled={loading}>
             {loading ? 'Creating account...' : 'Register →'}
           </button>
@@ -164,6 +140,10 @@ function Register() {
 
         <div className="toggle-text">
           Already have an account? <Link to="/login"><span>Login</span></Link>
+        </div>
+        
+        <div className="admin-link">
+          <Link to="/admin-register"><span>Register as Admin →</span></Link>
         </div>
       </div>
     </div>

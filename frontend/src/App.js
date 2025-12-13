@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminRegister from './pages/AdminRegister';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
 import './App.css';
@@ -41,11 +42,19 @@ function App() {
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
         />
         <Route 
+          path="/admin-register" 
+          element={isAuthenticated ? <Navigate to="/admin-dashboard" /> : <AdminRegister />} 
+        />
+        <Route 
           path="/verify" 
           element={<Verify />} 
         />
         <Route 
           path="/dashboard" 
+          element={isAuthenticated ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/admin-dashboard" 
           element={isAuthenticated ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} 
         />
         <Route path="/" element={<Navigate to="/login" />} />

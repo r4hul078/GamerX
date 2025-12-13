@@ -11,8 +11,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 // Register Route
 router.post('/register', async (req, res) => {
+  const client = await pool.connect();
   try {
-    const { username, email, password, role, adminSecret } = req.body;
+    const { username, email, password, role, adminSecret, storeName, phoneNumber } = req.body;
 
     // Validation
     if (!username || !email || !password) {
@@ -34,10 +35,13 @@ router.post('/register', async (req, res) => {
       if (!adminSecret || adminSecret !== ADMIN_SECRET) {
         return res.status(403).json({ message: 'Invalid admin secret' });
       }
+      if (!storeName || !phoneNumber) {
+        return res.status(400).json({ message: 'Store name and phone number are required for admin registration' });
+      }
     }
 
     // Check if user already exists
-    const userExists = await pool.query(
+    const userExists = await client.query(
       'SELECT * FROM users WHERE email = $1 OR username = $2',
       [email, username]
     );
@@ -59,13 +63,25 @@ router.post('/register', async (req, res) => {
       verificationToken = crypto.randomBytes(24).toString('hex');
     }
 
+    await client.query('BEGIN');
+
     // Create user
-    const result = await pool.query(
+    const result = await client.query(
       'INSERT INTO users (username, email, password, role, is_verified, verification_token) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, email, role, is_verified',
       [username, email, hashedPassword, requestedRole, isVerified, verificationToken]
     );
 
     const user = result.rows[0];
+
+    // If admin, create store entry
+    if (requestedRole === 'admin') {
+      await client.query(
+        'INSERT INTO admin_stores (admin_id, store_name, phone_number) VALUES ($1, $2, $3)',
+        [user.id, storeName, phoneNumber]
+      );
+    }
+
+    await client.query('COMMIT');
 
     // If user is verified (admins), create JWT token and return it
     if (user.is_verified) {
@@ -101,8 +117,11 @@ router.post('/register', async (req, res) => {
       },
     });
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error('Registration error:', error);
     res.status(500).json({ message: 'Registration failed' });
+  } finally {
+    client.release();
   }
 });
 

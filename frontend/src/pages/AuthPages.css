@@ -205,6 +205,28 @@
   text-decoration: underline;
 }
 
+.admin-link {
+  margin-top: 20px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.admin-link a {
+  text-decoration: none;
+  color: #7f00ff;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.admin-link a:hover {
+  color: #ff00c8;
+}
+
+.admin-link span:hover {
+  text-decoration: underline;
+}
+
 .auth-footer {
   margin-top: 30px;
   text-align: center;
