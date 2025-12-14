@@ -51,13 +51,13 @@ function App() {
         />
         <Route 
           path="/dashboard" 
-          element={isAuthenticated ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} 
+          element={<Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
         />
         <Route 
           path="/admin-dashboard" 
-          element={isAuthenticated ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} 
+          element={isAuthenticated ? <Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
         />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Router>
   );

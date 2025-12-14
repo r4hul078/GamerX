@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
-function Dashboard({ onLogout }) {
+function Dashboard({ onLogout, isAuthenticated }) {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState(null);
+  const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
   const handleLogout = () => {
     onLogout();
     navigate('/login');
+  };
+
+  const handleMyAccount = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
   };
 
   const categories = [
@@ -69,10 +76,15 @@ function Dashboard({ onLogout }) {
             <span>🛒</span>
             <span>My Cart</span>
           </button>
-          <button className="nav-icon-btn" onClick={() => navigate('/profile')}>
+          <button className="nav-icon-btn" onClick={handleMyAccount}>
             <span>👤</span>
-            <span>My Account</span>
+            <span>{isAuthenticated && user?.username ? user.username : 'My Account'}</span>
           </button>
+          {isAuthenticated && (
+            <button className="logout-btn-nav" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
         </div>
       </nav>
 
