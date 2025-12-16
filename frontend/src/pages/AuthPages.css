@@ -92,6 +92,13 @@
   font-weight: 800;
 }
 
+.auth-right-panel .subtitle {
+  color: var(--muted-text);
+  font-size: 15px;
+  margin-bottom: 18px;
+  max-width: 420px;
+}
+
 .input-group {
   margin-bottom: 20px;
 }
