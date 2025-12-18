@@ -76,18 +76,11 @@ function Register() {
   return (
     <div className="auth-container">
       <div className="auth-left-panel">
-        <div className="logo">GamerX</div>
-        <h1>Join the Game!</h1>
-        <p>Create your account and start playing</p>
-        {/* Gaming image */}
-        <div className="image-placeholder">
-          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Gaming" id="auth-image" />
-        </div>
+        <div className="image-placeholder" aria-hidden="true"></div>
       </div>
 
       <div className="auth-right-panel">
         <h2>Create your account</h2>
-        <p className="subtitle">Join the Game and level up your shopping experience</p>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleRegister}>

@@ -43,18 +43,11 @@ function Login({ setIsAuthenticated }) {
   return (
     <div className="auth-container">
       <div className="auth-left-panel">
-        <div className="logo">GamerX</div>
-        <h1>Welcome Back, Gamer!</h1>
-        <p>Sign in to continue your journey</p>
-        {/* Gaming image */}
-        <div className="image-placeholder">
-          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Gaming" id="auth-image" />
-        </div>
+        <div className="image-placeholder" aria-hidden="true"></div>
       </div>
 
       <div className="auth-right-panel">
         <h2>Holla, <br/>Welcome Back</h2>
-        <p className="subtitle">Hey, welcome back to your special place</p>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleLogin}>
