@@ -66,18 +66,11 @@ function AdminRegister() {
   return (
     <div className="auth-container">
       <div className="auth-left-panel">
-        <div className="logo">GamerX Admin</div>
-        <h1>Become a Store Admin</h1>
-        <p>Manage your gaming store efficiently</p>
-        <div className="image-placeholder">
-          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Admin" id="auth-image" />
-        </div>
+        <div className="image-placeholder" aria-hidden="true"></div>
       </div>
 
       <div className="auth-right-panel admin-panel">
         <h2>Admin Registration</h2>
-        <p className="subtitle">Create an admin account to manage products & orders</p>
-
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleAdminRegister}>
