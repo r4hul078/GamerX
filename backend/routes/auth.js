@@ -13,7 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 router.post('/register', async (req, res) => {
   const client = await pool.connect();
   try {
-    const { username, email, password, role, adminSecret, storeName, phoneNumber } = req.body;
+    const { username, email, password, role, phoneNumber } = req.body;
 
     // Validation
     if (!username || !email || !password) {
@@ -30,15 +30,7 @@ router.post('/register', async (req, res) => {
 
     const requestedRole = role === 'admin' ? 'admin' : 'user';
 
-    if (requestedRole === 'admin') {
-      const ADMIN_SECRET = process.env.ADMIN_SECRET || 'change_me_admin_secret';
-      if (!adminSecret || adminSecret !== ADMIN_SECRET) {
-        return res.status(403).json({ message: 'Invalid admin secret' });
-      }
-      if (!storeName || !phoneNumber) {
-        return res.status(400).json({ message: 'Store name and phone number are required for admin registration' });
-      }
-    }
+    // No admin secret or store-name requirement: admins register like regular users
 
     // Check if user already exists
     const userExists = await client.query(
@@ -54,14 +46,9 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Prepare verification
+    // All users require email verification flow
     let isVerified = false;
-    let verificationToken = null;
-    if (requestedRole === 'admin') {
-      // Auto-verify admins when created with correct secret
-      isVerified = true;
-    } else {
-      verificationToken = crypto.randomBytes(24).toString('hex');
-    }
+    const verificationToken = crypto.randomBytes(24).toString('hex');
 
     await client.query('BEGIN');
 
@@ -73,13 +60,7 @@ router.post('/register', async (req, res) => {
 
     const user = result.rows[0];
 
-    // If admin, create store entry
-    if (requestedRole === 'admin') {
-      await client.query(
-        'INSERT INTO admin_stores (admin_id, store_name, phone_number) VALUES ($1, $2, $3)',
-        [user.id, storeName, phoneNumber]
-      );
-    }
+    // Admin store entries are no longer auto-created during registration
 
     await client.query('COMMIT');
 

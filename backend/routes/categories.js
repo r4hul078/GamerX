@@ -5,6 +5,19 @@ const { authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Get all categories (public route)
+router.get('/list/all', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT DISTINCT name FROM categories ORDER BY name ASC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ message: 'Error fetching categories' });
+  }
+});
+
 // Get all categories for a specific admin
 router.get('/', authenticateToken, authorize(['admin']), async (req, res) => {
   try {

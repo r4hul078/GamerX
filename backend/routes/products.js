@@ -5,6 +5,41 @@ const { authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Get all products (public route - shows all products from all admins)
+router.get('/list/all', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT p.*, c.name as category_name 
+       FROM products p 
+       LEFT JOIN categories c ON p.category_id = c.id 
+       ORDER BY p.created_at DESC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching all products:', error);
+    res.status(500).json({ message: 'Error fetching products' });
+  }
+});
+
+// Get products by category (public route)
+router.get('/list/category/:categoryName', async (req, res) => {
+  try {
+    const categoryName = req.params.categoryName;
+    const result = await pool.query(
+      `SELECT p.*, c.name as category_name 
+       FROM products p 
+       LEFT JOIN categories c ON p.category_id = c.id 
+       WHERE LOWER(c.name) = LOWER($1) 
+       ORDER BY p.created_at DESC`,
+      [categoryName]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching products by category:', error);
+    res.status(500).json({ message: 'Error fetching products by category' });
+  }
+});
+
 // Get all products for a specific admin
 router.get('/', authenticateToken, authorize(['admin']), async (req, res) => {
   try {

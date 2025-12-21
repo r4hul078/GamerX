@@ -1,13 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import api from '../services/api';
 import './Dashboard.css';
 
 function Dashboard({ onLogout, isAuthenticated }) {
   const navigate = useNavigate();
-  const { getTotalItems } = useCart();
-  const [activeCategory, setActiveCategory] = useState(null);
+  const { addToCart, getTotalItems } = useCart();
+  const [activeCategory, setActiveCategory] = useState('All categories');
+  const [categories, setCategories] = useState(['All categories']);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
+
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts('All categories');
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get('/categories/list/all');
+      const categoryNames = response.data.map(cat => cat.name);
+      setCategories(['All categories', ...categoryNames]);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setCategories(['All categories']);
+    }
+  };
+
+  const fetchProducts = async (category) => {
+    setLoading(true);
+    try {
+      let response;
+      if (category === 'All categories') {
+        response = await api.get('/products/list/all');
+      } else {
+        response = await api.get(`/products/list/category/${category}`);
+      }
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    fetchProducts(category);
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart(product);
+    alert(`${product.name} added to cart!`);
+  };
 
   const handleLogout = () => {
     onLogout();
@@ -23,32 +76,6 @@ function Dashboard({ onLogout, isAuthenticated }) {
   const handleCartClick = () => {
     navigate('/cart');
   };
-
-  const categories = [
-    'All categories',
-    'Mobile phones',
-    'Laptops',
-    'Speakers',
-    'Smart Watch',
-    'RGB Lights',
-    'Earbuds',
-    'PC Build'
-  ];
-
-  const deals = [
-    {
-      title: 'Great Deals on Laptop',
-      category: 'Laptops'
-    },
-    {
-      title: 'Great Deals on PC Build',
-      category: 'PC Build'
-    },
-    {
-      title: 'Great Deals on Earbuds',
-      category: 'Earbuds'
-    }
-  ];
 
   return (
     <div className="dashboard-container">
@@ -103,7 +130,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
               <button
                 key={category}
                 className={`category-btn ${activeCategory === category ? 'active' : ''}`}
-                onClick={() => setActiveCategory(category)}
+                onClick={() => handleCategoryClick(category)}
               >
                 -{category}
               </button>
@@ -116,23 +143,56 @@ function Dashboard({ onLogout, isAuthenticated }) {
             <div className="banner">
               <div className="banner-content">
                 <p className="banner-subtitle">A remarkable variety of</p>
-                <h1 className="banner-title">PC BUILD</h1>
+                <h1 className="banner-title">{activeCategory}</h1>
               </div>
               <div className="banner-image">
                 {/* Image would go here */}
               </div>
             </div>
 
-            {/* Deals Grid */}
+            {/* Products Grid */}
             <div className="deals-grid">
-              {deals.map((deal, index) => (
-                <div key={index} className="deal-card">
-                  <div className="deal-image-placeholder"></div>
-                  <h3>{deal.title}</h3>
-                  <p className="deal-category">{deal.category}</p>
-                  <button className="buy-btn">Buy Now</button>
+              {loading ? (
+                <p className="loading">Loading products...</p>
+              ) : products.length === 0 ? (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
+                  <p style={{ fontSize: '18px', color: '#666' }}>
+                    There are no products here
+                  </p>
                 </div>
-              ))}
+              ) : (
+                products.map((product) => (
+                  <div
+                    key={product.id}
+                    className="product-card deal-card"
+                    onClick={() => handleProductClick(product.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="product-image-img"
+                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <div className="deal-image-placeholder"></div>
+                    )}
+                    <h3>{product.name}</h3>
+                    <p className="deal-category">₹{product.price.toFixed(2)}</p>
+                    <p style={{ fontSize: '12px', color: '#999' }}>
+                      Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
+                    </p>
+                    <button
+                      className="buy-btn"
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled={product.stock === 0}
+                    >
+                      {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

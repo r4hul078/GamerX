@@ -9,8 +9,6 @@ function AdminRegister() {
     email: '',
     password: '',
     confirmPassword: '',
-    adminSecret: '',
-    storeName: '',
     phoneNumber: '',
   });
   const [error, setError] = useState('');
@@ -40,10 +38,7 @@ function AdminRegister() {
       return;
     }
 
-    if (!formData.adminSecret) {
-      setError('Admin secret is required');
-      return;
-    }
+    // No admin secret required for registration
 
     setLoading(true);
 
@@ -53,8 +48,6 @@ function AdminRegister() {
         email: formData.email,
         password: formData.password,
         role: 'admin',
-        adminSecret: formData.adminSecret,
-        storeName: formData.storeName,
         phoneNumber: formData.phoneNumber,
       });
 
@@ -87,17 +80,7 @@ function AdminRegister() {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleAdminRegister}>
-          <div className="form-group">
-            <label>Store Name *</label>
-            <input
-              type="text"
-              name="storeName"
-              value={formData.storeName}
-              onChange={handleChange}
-              placeholder="Your Gaming Store"
-              required
-            />
-          </div>
+          {/* Store name removed from admin registration */}
 
           <div className="form-group">
             <label>Admin Username *</label>
@@ -106,7 +89,6 @@ function AdminRegister() {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Admin username"
               required
             />
           </div>
@@ -118,7 +100,6 @@ function AdminRegister() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="admin@store.com"
               required
             />
           </div>
@@ -130,7 +111,6 @@ function AdminRegister() {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              placeholder="+977-9800000000000"
               required
             />
           </div>
@@ -142,7 +122,6 @@ function AdminRegister() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="At least 6 characters"
               required
             />
           </div>
@@ -154,25 +133,11 @@ function AdminRegister() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              placeholder="Confirm password"
               required
             />
           </div>
 
-          <div className="form-group">
-            <label>Admin Secret Key *</label>
-            <input
-              type="password"
-              name="adminSecret"
-              value={formData.adminSecret}
-              onChange={handleChange}
-              placeholder="Enter admin secret"
-              required
-            />
-            <small style={{ color: '#888', marginTop: '5px' }}>
-              Contact support for the admin secret key
-            </small>
-          </div>
+          {/* Admin secret removed */}
 
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Registering...' : 'Register as Admin'}
