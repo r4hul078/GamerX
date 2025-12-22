@@ -30,8 +30,10 @@ function ProductDetails() {
   }, [fetchProductDetails]);
 
   const handleAddToCart = () => {
-    addToCart(product);
-    alert(`${product.name} added to cart!`);
+    const added = addToCart(product);
+    if (added) {
+      alert(`${product.name} added to cart!`);
+    }
   };
 
   if (loading) {

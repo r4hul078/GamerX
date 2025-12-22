@@ -75,8 +75,10 @@ function HomePage() {
 
   const handleAddToCart = (e, product) => {
     e.stopPropagation(); // Prevent triggering the card click
-    addToCart(product);
-    alert(`${product.name} added to cart!`);
+    const added = addToCart(product);
+    if (added) {
+      alert(`${product.name} added to cart!`);
+    }
   };
 
   return (

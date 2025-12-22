@@ -65,8 +65,10 @@ function Dashboard({ onLogout, isAuthenticated }) {
 
   const handleAddToCart = (e, product) => {
     e.stopPropagation();
-    addToCart(product);
-    alert(`${product.name} added to cart!`);
+    const added = addToCart(product);
+    if (added) {
+      alert(`${product.name} added to cart!`);
+    }
   };
 
   const handleLogout = () => {
