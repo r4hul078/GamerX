@@ -183,7 +183,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
                 <p className="loading">Loading products...</p>
               ) : products.length === 0 ? (
                 <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
-                  <p style={{ fontSize: '18px', color: '#666' }}>
+                  <p style={{ fontSize: '18px', color: 'var(--muted-text)' }}>
                     There are no products here
                   </p>
                 </div>

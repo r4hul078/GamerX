@@ -61,16 +61,60 @@ router.get('/', authenticateToken, authorize(['admin']), async (req, res) => {
 // Get featured products for homepage (public route)
 router.get('/featured/list', async (req, res) => {
   try {
-    const adminId = req.query.admin_id;
-    let query = 'SELECT * FROM products WHERE is_featured = true';
-    let params = [];
+    const { admin_id: adminId, category, min_price, max_price, min_stock, max_stock } = req.query;
+
+    // Base query with category join so we can filter by category name if provided
+    let query = `SELECT p.*, c.name as category_name
+                 FROM products p
+                 LEFT JOIN categories c ON p.category_id = c.id
+                 WHERE p.is_featured = true`;
+
+    const params = [];
+    let idx = 1;
 
     if (adminId) {
-      query += ' AND admin_id = $1';
+      query += ` AND p.admin_id = $${idx}`;
       params.push(adminId);
+      idx++;
     }
 
-    query += ' ORDER BY created_at DESC';
+    if (category) {
+      query += ` AND LOWER(c.name) = LOWER($${idx})`;
+      params.push(category);
+      idx++;
+    }
+
+    // Price filters
+    const minPriceNum = parseFloat(min_price);
+    if (!Number.isNaN(minPriceNum)) {
+      query += ` AND p.price >= $${idx}`;
+      params.push(minPriceNum);
+      idx++;
+    }
+
+    const maxPriceNum = parseFloat(max_price);
+    if (!Number.isNaN(maxPriceNum)) {
+      query += ` AND p.price <= $${idx}`;
+      params.push(maxPriceNum);
+      idx++;
+    }
+
+    // Stock filters
+    const minStockNum = parseInt(min_stock, 10);
+    if (!Number.isNaN(minStockNum)) {
+      query += ` AND p.stock >= $${idx}`;
+      params.push(minStockNum);
+      idx++;
+    }
+
+    const maxStockNum = parseInt(max_stock, 10);
+    if (!Number.isNaN(maxStockNum)) {
+      query += ` AND p.stock <= $${idx}`;
+      params.push(maxStockNum);
+      idx++;
+    }
+
+    query += ' ORDER BY p.created_at DESC';
 
     const result = await pool.query(query, params);
     res.json(result.rows);

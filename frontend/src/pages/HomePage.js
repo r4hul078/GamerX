@@ -14,15 +14,32 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [categoryLoading, setCategoryLoading] = useState(true);
 
+  // New filter states
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [minStock, setMinStock] = useState('');
+  const [maxStock, setMaxStock] = useState('');
+
   useEffect(() => {
     fetchCategories();
     fetchFeaturedProducts();
   }, []);
 
+  const buildFeaturedQuery = () => {
+    const params = {};
+    if (selectedCategory) params.category = selectedCategory;
+    if (minPrice !== '') params.min_price = minPrice;
+    if (maxPrice !== '') params.max_price = maxPrice;
+    if (minStock !== '') params.min_stock = minStock;
+    if (maxStock !== '') params.max_stock = maxStock;
+    return params;
+  };
+
   const fetchFeaturedProducts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/products/featured/list');
+      const params = buildFeaturedQuery();
+      const response = await api.get('/products/featured/list', { params });
       setFeaturedProducts(response.data);
       setFilteredProducts(response.data);
     } catch (error) {
@@ -48,21 +65,35 @@ function HomePage() {
     setSelectedCategory(categoryName);
     setLoading(true);
     try {
-      if (!categoryName) {
-        // Show all featured products
-        setFilteredProducts(featuredProducts);
-      } else {
-        // Fetch products from the selected category
-        const response = await api.get(`/products/list/category/${categoryName}`);
-        // Filter to show only featured products from the category
-        const featured = response.data.filter(p => p.is_featured === true);
-        setFilteredProducts(featured);
-      }
+      // fetch using featured endpoint with category and any active price/stock filters
+      const response = await api.get('/products/featured/list', { params: { ...buildFeaturedQuery(), category: categoryName } });
+      setFilteredProducts(response.data);
     } catch (error) {
       console.error('Error filtering products by category:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const applyFilters = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/products/featured/list', { params: buildFeaturedQuery() });
+      setFilteredProducts(response.data);
+    } catch (error) {
+      console.error('Error applying filters:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearFilters = async () => {
+    setMinPrice('');
+    setMaxPrice('');
+    setMinStock('');
+    setMaxStock('');
+    // Reload products without filters
+    fetchFeaturedProducts();
   };
 
   const handleAuthClick = (authType) => {
@@ -132,6 +163,33 @@ function HomePage() {
                   {category.name}
                 </button>
               ))}
+            </div>
+
+            {/* Price & Quantity filters */}
+            <div className="filter-panel">
+              <h3>Filter by Price & Quantity:</h3>
+              <div className="filter-row">
+                <div className="filter-group">
+                  <label>Min Price</label>
+                  <input type="number" min="0" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} placeholder="Min Price" />
+                </div>
+                <div className="filter-group">
+                  <label>Max Price</label>
+                  <input type="number" min="0" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} placeholder="Max Price" />
+                </div>
+                <div className="filter-group">
+                  <label>Min Qty</label>
+                  <input type="number" min="0" value={minStock} onChange={(e) => setMinStock(e.target.value)} placeholder="Min Stock" />
+                </div>
+                <div className="filter-group">
+                  <label>Max Qty</label>
+                  <input type="number" min="0" value={maxStock} onChange={(e) => setMaxStock(e.target.value)} placeholder="Max Stock" />
+                </div>
+                <div className="filter-actions">
+                  <button className="btn btn-primary" onClick={applyFilters}>Apply</button>
+                  <button className="btn btn-secondary" onClick={clearFilters}>Clear</button>
+                </div>
+              </div>
             </div>
           </div>
         )}
