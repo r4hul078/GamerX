@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import PaymentModal from '../components/PaymentModal';
 import api from '../services/api';
 import './Dashboard.css';
 
 function Dashboard({ onLogout, isAuthenticated }) {
   const navigate = useNavigate();
-  const { addToCart, getTotalItems } = useCart();
+  const { addToCart, getTotalItems, clearCart } = useCart();
   const [activeCategory, setActiveCategory] = useState('All categories');
   const [categories, setCategories] = useState(['All categories']);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [singleProductCheckout, setSingleProductCheckout] = useState(null);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
   useEffect(() => {
@@ -60,6 +63,18 @@ function Dashboard({ onLogout, isAuthenticated }) {
     e.stopPropagation();
     addToCart(product);
     alert(`${product.name} added to cart!`);
+  };
+
+  const handleBuyNow = (e, product) => {
+    e.stopPropagation();
+    // Create a temporary single-item cart for quick checkout
+    setSingleProductCheckout([{ ...product, quantity: 1 }]);
+    setIsPaymentModalOpen(true);
+  };
+
+  const handlePaymentSuccess = (result) => {
+    setSingleProductCheckout(null);
+    alert(`Order successful!\nOrder ID: ${result.orderId}\nThank you for your purchase!`);
   };
 
   const handleLogout = () => {
@@ -183,13 +198,24 @@ function Dashboard({ onLogout, isAuthenticated }) {
                     <p style={{ fontSize: '12px', color: '#999' }}>
                       Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
                     </p>
-                    <button
-                      className="buy-btn"
-                      onClick={(e) => handleAddToCart(e, product)}
-                      disabled={product.stock === 0}
-                    >
-                      {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                      <button
+                        className="buy-btn"
+                        onClick={(e) => handleAddToCart(e, product)}
+                        disabled={product.stock === 0}
+                        style={{ flex: 1 }}
+                      >
+                        {product.stock > 0 ? '🛒 Add to Cart' : 'Out of Stock'}
+                      </button>
+                      <button
+                        className="buy-btn"
+                        onClick={(e) => handleBuyNow(e, product)}
+                        disabled={product.stock === 0}
+                        style={{ flex: 1, background: '#5DADE2' }}
+                      >
+                        {product.stock > 0 ? '💳 Buy Now' : 'Out of Stock'}
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -197,6 +223,18 @@ function Dashboard({ onLogout, isAuthenticated }) {
           </div>
         </div>
       </div>
+
+      {/* Payment Modal for single product */}
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        totalAmount={singleProductCheckout ? singleProductCheckout[0]?.price : 0}
+        cartItems={singleProductCheckout || []}
+        onClose={() => {
+          setIsPaymentModalOpen(false);
+          setSingleProductCheckout(null);
+        }}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
 
       {/* Logout Button */}
       <button onClick={handleLogout} className="logout-btn-float">
