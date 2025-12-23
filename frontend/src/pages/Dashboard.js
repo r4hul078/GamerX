@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import api from '../services/api';
+import AdminDashboard from './AdminDashboard';
 import './Dashboard.css';
 
 function Dashboard({ onLogout, isAuthenticated }) {
@@ -12,6 +13,11 @@ function Dashboard({ onLogout, isAuthenticated }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
+
+  // If user is admin, show admin dashboard instead
+  if (user && user.role === 'admin') {
+    return <AdminDashboard onLogout={onLogout} isAuthenticated={isAuthenticated} />;
+  }
 
   useEffect(() => {
     fetchCategories();

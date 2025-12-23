@@ -45,50 +45,49 @@ router.post('/register', async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Prepare verification
-    // All users require email verification flow
-    let isVerified = false;
-    const verificationToken = crypto.randomBytes(24).toString('hex');
+    // Auto-verify users (no email verification required)
+    const isVerified = true;
 
     await client.query('BEGIN');
 
     // Create user
     const result = await client.query(
-      'INSERT INTO users (username, email, password, role, is_verified, verification_token) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, email, role, is_verified',
-      [username, email, hashedPassword, requestedRole, isVerified, verificationToken]
+      'INSERT INTO users (username, email, password, role, is_verified) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, role, is_verified',
+      [username, email, hashedPassword, requestedRole, isVerified]
     );
 
     const user = result.rows[0];
 
-    // Admin store entries are no longer auto-created during registration
+    // If user is admin, seed initial categories
+    if (user.role === 'admin') {
+      const categoriesData = [
+        { name: 'Keyboard', description: 'Gaming keyboards with mechanical switches and RGB lighting' },
+        { name: 'Mouse', description: 'High-precision gaming mice with adjustable DPI' },
+        { name: 'Headphones', description: 'Gaming headsets with surround sound and noise cancellation' },
+        { name: 'MousePads', description: 'Large gaming mouse pads with precision surfaces' },
+        { name: 'Monitors', description: 'High refresh rate gaming monitors with low response time' }
+      ];
+
+      for (const category of categoriesData) {
+        await client.query(
+          'INSERT INTO categories (admin_id, name, description) VALUES ($1, $2, $3) ON CONFLICT (admin_id, name) DO NOTHING',
+          [user.id, category.name, category.description]
+        );
+      }
+    }
 
     await client.query('COMMIT');
 
-    // If user is verified (admins), create JWT token and return it
-    if (user.is_verified) {
-      const token = jwt.sign(
-        { id: user.id, email: user.email, username: user.username, role: user.role },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-      );
+    // Create JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, username: user.username, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
-      return res.status(201).json({
-        message: 'User registered and verified',
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          is_verified: user.is_verified,
-        },
-      });
-    }
-
-    // For non-verified users, return verification token (in production send email instead)
-    res.status(201).json({
-      message: 'Registration successful. Please verify your email using the provided token.',
-      verificationToken,
+    return res.status(201).json({
+      message: 'User registered successfully',
+      token,
       user: {
         id: user.id,
         username: user.username,
@@ -135,10 +134,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    if (!user.is_verified) {
-      return res.status(403).json({ message: 'Please verify your email before logging in' });
-    }
-
     // Create JWT token including role
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username, role: user.role },
@@ -164,6 +159,7 @@ router.post('/login', async (req, res) => {
 
 // Email verification endpoint
 router.get('/verify', async (req, res) => {
+  const client = await pool.connect();
   try {
     const { token } = req.query;
     if (!token) return res.status(400).json({ message: 'Verification token required' });
@@ -174,12 +170,39 @@ router.get('/verify', async (req, res) => {
     }
 
     const user = result.rows[0];
-    await pool.query('UPDATE users SET is_verified = true, verification_token = NULL WHERE id = $1', [user.id]);
+    
+    await client.query('BEGIN');
+    
+    // Verify the user
+    await client.query('UPDATE users SET is_verified = true, verification_token = NULL WHERE id = $1', [user.id]);
+
+    // If user is an admin, seed initial categories
+    if (user.role === 'admin') {
+      const categoriesData = [
+        { name: 'Keyboard', description: 'Gaming keyboards with mechanical switches and RGB lighting' },
+        { name: 'Mouse', description: 'High-precision gaming mice with adjustable DPI' },
+        { name: 'Headphones', description: 'Gaming headsets with surround sound and noise cancellation' },
+        { name: 'MousePads', description: 'Large gaming mouse pads with precision surfaces' },
+        { name: 'Monitors', description: 'High refresh rate gaming monitors with low response time' }
+      ];
+
+      for (const category of categoriesData) {
+        await client.query(
+          'INSERT INTO categories (admin_id, name, description) VALUES ($1, $2, $3) ON CONFLICT (admin_id, name) DO NOTHING',
+          [user.id, category.name, category.description]
+        );
+      }
+    }
+
+    await client.query('COMMIT');
 
     return res.json({ message: 'Email verified successfully' });
   } catch (err) {
+    await client.query('ROLLBACK');
     console.error('Verification error:', err);
     res.status(500).json({ message: 'Verification failed' });
+  } finally {
+    client.release();
   }
 });
 

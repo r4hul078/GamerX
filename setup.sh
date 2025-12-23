@@ -71,6 +71,16 @@ PGPASSWORD=$DB_PASSWORD psql -U $DB_GAMERX_USER -d $DB_NAME -h localhost -f back
 echo "✅ Tables created"
 echo ""
 
+# Run migrations
+echo "Running migrations..."
+PGPASSWORD=$DB_PASSWORD psql -U $DB_GAMERX_USER -d $DB_NAME -h localhost -f backend/migrations/add_products_schema.sql
+echo "✅ Migrations completed"
+echo ""
+
+# Note about seeding categories
+echo "ℹ️  Initial categories will be seeded when the first admin user is registered."
+echo ""
+
 # Backend setup
 echo "=========================================="
 echo "Backend Setup"
