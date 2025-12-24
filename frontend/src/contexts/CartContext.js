@@ -35,7 +35,8 @@ export const CartProvider = ({ children }) => {
 
     // Prevent adding products with no stock
     if (Number(product.stock) === 0) {
-      alert('This product is sold out');
+      // Clearer message and prevent zero-stock orders
+      alert('Cannot add to cart — product is sold out.');
       return false;
     }
 
