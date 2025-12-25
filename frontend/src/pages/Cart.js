@@ -132,7 +132,7 @@ function Cart({ onLogout, isAuthenticated }) {
                       <div className="cart-item-details">
                         <h3>{item.name}</h3>
                         <p className="cart-item-category">{item.category}</p>
-                        <div className="cart-item-price">₹{item.price.toFixed(2)}</div>
+                        <div className="cart-item-price">{isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price).toFixed(2)}`}</div>
                       </div>
                       <div className="cart-item-quantity">
                         <button
@@ -150,7 +150,7 @@ function Cart({ onLogout, isAuthenticated }) {
                         </button>
                       </div>
                       <div className="cart-item-total">
-                        ₹{(item.price * item.quantity).toFixed(2)}
+                        {isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price * item.quantity).toFixed(2)}`}
                       </div>
                       <button
                         className="remove-btn"
@@ -167,7 +167,7 @@ function Cart({ onLogout, isAuthenticated }) {
                   <div className="cart-summary-content">
                     <div className="summary-row">
                       <span>Subtotal ({getTotalItems()} items):</span>
-                      <span>₹{getTotalPrice().toFixed(2)}</span>
+                      <span>{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
                     </div>
                     <div className="summary-row">
                       <span>Shipping:</span>
@@ -175,7 +175,7 @@ function Cart({ onLogout, isAuthenticated }) {
                     </div>
                     <div className="summary-row total">
                       <span>Total:</span>
-                      <span>₹{getTotalPrice().toFixed(2)}</span>
+                      <span>{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
                     </div>
                     <div className="cart-actions">
                       <button className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>

@@ -156,7 +156,7 @@ function HomePage() {
                   )}
                   <div className="product-footer">
                     <div className="product-footer-top">
-                      <span className="price">₹{product.price.toFixed(2)}</span>
+                      <span className="price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
                       <span className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
                         {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
                       </span>

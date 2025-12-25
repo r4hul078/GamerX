@@ -71,10 +71,16 @@ function ProductDetails() {
           </div>
 
           <div className="product-info">
-            <h1>{product.name}</h1>
-            <div className="price">₹{product.price.toFixed(2)}</div>
-            <div className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
-              {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
+            <div className="header-row">
+              <div>
+                <h1>{product.name}</h1>
+              </div>
+              <div className="price-stock">
+                <div className="price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
+                <div className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
+                </div>
+              </div>
             </div>
 
             {product.description && (

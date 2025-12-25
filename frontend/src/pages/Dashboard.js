@@ -11,6 +11,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
   const [activeCategory, setActiveCategory] = useState('All categories');
   const [categories, setCategories] = useState(['All categories']);
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
@@ -106,8 +107,24 @@ function Dashboard({ onLogout, isAuthenticated }) {
         </div>
         
         <div className="search-container">
-          <input type="text" placeholder="What are you looking for?" className="search-bar" />
-          <button className="search-btn">🔍</button>
+          <input
+            type="text"
+            placeholder="Search products by name or description"
+            className="search-bar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.preventDefault();
+            }}
+          />
+          <button
+            className="search-btn"
+            onClick={(e) => e.preventDefault()}
+            title="Search"
+            aria-label="Search products"
+          >
+            🔍
+          </button>
         </div>
 
         <div className="navbar-right">
@@ -167,7 +184,16 @@ function Dashboard({ onLogout, isAuthenticated }) {
                   </p>
                 </div>
               ) : (
-                products.map((product) => (
+                // Apply client-side search (name or description)
+                products
+                  .filter((p) => {
+                    if (!searchTerm || searchTerm.trim() === '') return true;
+                    const q = searchTerm.trim().toLowerCase();
+                    const name = (p.name || '').toString().toLowerCase();
+                    const desc = (p.description || '').toString().toLowerCase();
+                    return name.includes(q) || desc.includes(q);
+                  })
+                  .map((product) => (
                   <div
                     key={product.id}
                     className="product-card deal-card"
@@ -185,7 +211,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
                       <div className="deal-image-placeholder"></div>
                     )}
                     <h3>{product.name}</h3>
-                    <p className="deal-category">₹{product.price.toFixed(2)}</p>
+                    <p className="deal-category">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</p>
                     <p style={{ fontSize: '12px', color: '#999' }}>
                       Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
                     </p>

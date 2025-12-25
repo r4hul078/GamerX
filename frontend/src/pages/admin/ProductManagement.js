@@ -245,7 +245,7 @@ function ProductManagement({ onUpdate }) {
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="price">Price (₹) *</label>
+                <label htmlFor="price">Price *</label>
                 <input
                   type="number"
                   id="price"
@@ -317,8 +317,13 @@ function ProductManagement({ onUpdate }) {
       )}
 
       <div className="products-filter">
-        <label>Filter by Category:</label>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+        <label>Filter by Category (filters product list below):</label>
+        <select
+          aria-label="Filter products by category"
+          title="Select a category to filter the products shown below"
+          value={filterCategory}
+          onChange={(e) => setFilterCategory(e.target.value)}
+        >
           <option value="">All Categories</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
@@ -373,7 +378,7 @@ function ProductManagement({ onUpdate }) {
                       </div>
                     </td>
                     <td>{product.category_name}</td>
-                    <td className="price">₹{product.price.toFixed(2)}</td>
+                    <td className="price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</td>
                     <td>
                       <span
                         className={`stock-badge ${
