@@ -8,25 +8,25 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border);
 }
 
 .product-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--text-color);
 }
 
 .product-form {
-  background: #f9f9f9;
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 30px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--accent);
 }
 
 .product-form h3 {
   margin-top: 0;
-  color: #333;
+  color: var(--text-color);
 }
 
 .form-row {
@@ -42,7 +42,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--text-color);
   font-weight: 500;
 }
 
@@ -51,7 +51,7 @@
 .form-group select {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 5px;
   font-size: 14px;
   font-family: inherit;
@@ -62,8 +62,8 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.08);
 }
 
 .form-group.checkbox {
@@ -114,13 +114,13 @@
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  background: rgba(0,0,0,0.04);
 }
 
 .alert {
@@ -148,13 +148,13 @@
   gap: 15px;
   margin-bottom: 25px;
   padding: 15px;
-  background: #f9f9f9;
+  background: var(--card-bg);
   border-radius: 5px;
 }
 
 .products-filter label {
   font-weight: 500;
-  color: #333;
+  color: var(--text-color);
 }
 
 .products-filter select {
@@ -187,12 +187,12 @@
 .products-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: var(--card-bg);
 }
 
 .products-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--accent) 0%, #764ba2 100%);
+  color: var(--hero-text);
   font-weight: 600;
 }
 
@@ -235,40 +235,40 @@
   height: 50px;
   object-fit: cover;
   border-radius: 5px;
-  background: #f0f0f0;
+  background: var(--card-bg);
 }
 
 .product-info h4 {
   margin: 0 0 5px 0;
-  color: #333;
+  color: var(--text-color);
   font-size: 15px;
 }
 
 .product-desc {
   margin: 0;
-  color: #999;
+  color: var(--muted-text);
   font-size: 12px;
 }
 
 .price {
   font-weight: 600;
-  color: #667eea;
+  color: var(--accent);
   font-size: 15px;
 }
 
 .stock-badge {
   display: inline-block;
   padding: 6px 12px;
-  background: #eef;
-  color: #667eea;
+  background: rgba(102,126,234,0.06);
+  color: var(--accent);
   border-radius: 20px;
   font-weight: 600;
   font-size: 13px;
 }
 
 .stock-badge.low-stock {
-  background: #fee;
-  color: #c00;
+  background: rgba(239,68,68,0.06);
+  color: var(--danger);
 }
 
 .btn-featured {
@@ -279,13 +279,13 @@
   font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--card-bg);
+  color: var(--muted-text);
 }
 
 .btn-featured.active {
-  background: #ffd700;
-  color: #333;
+  background: var(--warning);
+  color: var(--text-color);
 }
 
 .btn-featured:hover {
@@ -308,7 +308,7 @@
 }
 
 .btn-stock {
-  color: #667eea;
+  color: var(--accent);
 }
 
 .btn-stock:hover {
@@ -316,7 +316,7 @@
 }
 
 .btn-edit {
-  color: #2196f3;
+  color: var(--accent);
 }
 
 .btn-edit:hover {
@@ -324,7 +324,7 @@
 }
 
 .btn-delete {
-  color: #e74c3c;
+  color: var(--danger);
 }
 
 .btn-delete:hover {

@@ -1,10 +1,8 @@
 .order-management {
   padding: 20px;
-  background-color: #1a1a1a;
+  background: var(--page-bg);
   border-radius: 10px;
-  color: white;
-}
-
+  color: var(--text-color);
 .order-header {
   display: flex;
   justify-content: space-between;
@@ -18,8 +16,8 @@
 }
 
 .btn-refresh {
-  background-color: #2196f3;
-  color: white;
+  background: var(--accent);
+  color: var(--hero-text);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -29,12 +27,12 @@
 }
 
 .btn-refresh:hover {
-  background-color: #1976d2;
+  filter: brightness(0.95);
 }
 
 .error-message {
-  background-color: #f44336;
-  color: white;
+  background-color: var(--danger);
+  color: var(--hero-text);
   padding: 12px;
   border-radius: 5px;
   margin-bottom: 15px;
@@ -48,9 +46,9 @@
 }
 
 .filter-btn {
-  background-color: #333;
-  color: white;
-  border: 2px solid #555;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 2px solid rgba(0,0,0,0.04);
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
@@ -58,16 +56,17 @@
 }
 
 .filter-btn:hover {
-  border-color: #2196f3;
+  border-color: var(--accent);
 }
 
 .filter-btn.active {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--hero-text);
 }
 
 .order-container {
-  background-color: #262626;
+  background: var(--card-bg);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -76,7 +75,7 @@
 .no-orders {
   text-align: center;
   padding: 40px;
-  color: #999;
+  color: var(--muted-text);
 }
 
 .orders-list {
@@ -94,9 +93,9 @@
   grid-template-columns: 80px 200px 120px 100px 120px 120px 150px 120px;
   gap: 10px;
   padding: 15px;
-  background-color: #1a1a1a;
+  background: var(--page-bg);
   font-weight: bold;
-  border-bottom: 2px solid #444;
+  border-bottom: 2px solid rgba(0,0,0,0.06);
   position: sticky;
   top: 0;
 }
@@ -106,13 +105,13 @@
   grid-template-columns: 80px 200px 120px 100px 120px 120px 150px 120px;
   gap: 10px;
   padding: 15px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
   align-items: center;
   transition: background-color 0.2s;
 }
 
 .table-row:hover {
-  background-color: #2a2a2a;
+  background-color: rgba(0,0,0,0.03);
 }
 
 .table-cell {
@@ -128,11 +127,12 @@
 
 .customer-info small {
   font-size: 12px;
-  color: #999;
+  color: var(--muted-text);
 }
 
 .item-count {
-  background-color: #555;
+  background-color: var(--muted-text);
+  color: var(--hero-text);
   padding: 4px 8px;
   border-radius: 3px;
   font-size: 12px;
@@ -140,7 +140,7 @@
 
 .status-badge,
 .payment-badge {
-  color: white;
+  color: var(--hero-text);
   padding: 6px 12px;
   border-radius: 4px;
   font-size: 12px;
@@ -148,8 +148,8 @@
 }
 
 .btn-view {
-  background-color: #2196f3;
-  color: white;
+  background-color: var(--accent);
+  color: var(--hero-text);
   border: none;
   padding: 8px 12px;
   border-radius: 4px;
@@ -159,7 +159,7 @@
 }
 
 .btn-view:hover {
-  background-color: #1976d2;
+  filter: brightness(0.95);
 }
 
 /* Modal Styles */
@@ -186,14 +186,14 @@
 
 .modal-content {
   position: relative;
-  background-color: #1a1a1a;
+  background: var(--card-bg);
   border-radius: 10px;
   max-width: 900px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  color: var(--text-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .modal-header {
@@ -201,7 +201,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid rgba(0,0,0,0.06);
 }
 
 .modal-header h3 {

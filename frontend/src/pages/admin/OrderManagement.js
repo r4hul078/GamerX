@@ -77,11 +77,11 @@ function OrderManagement() {
 
   const getStatusBadge = (status) => {
     const statusStyles = {
-      pending: { bg: '#ff9800', text: 'Pending' },
-      confirmed: { bg: '#4caf50', text: 'Confirmed' },
-      shipped: { bg: '#2196f3', text: 'Shipped' },
-      delivered: { bg: '#4caf50', text: 'Delivered' },
-      cancelled: { bg: '#f44336', text: 'Cancelled' }
+      pending: { bg: 'var(--warning)', text: 'Pending' },
+      confirmed: { bg: 'var(--success)', text: 'Confirmed' },
+      shipped: { bg: 'var(--accent)', text: 'Shipped' },
+      delivered: { bg: 'var(--success)', text: 'Delivered' },
+      cancelled: { bg: 'var(--danger)', text: 'Cancelled' }
     };
     const style = statusStyles[status] || statusStyles.pending;
     return style;
@@ -186,7 +186,7 @@ function OrderManagement() {
                       className="payment-badge"
                       style={{
                         backgroundColor:
-                          order.payment_status === 'success' ? '#4caf50' : '#ff9800'
+                          order.payment_status === 'success' ? 'var(--success)' : 'var(--warning)'
                       }}
                     >
                       {order.payment_status || 'Pending'}
