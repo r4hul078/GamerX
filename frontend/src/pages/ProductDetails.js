@@ -54,64 +54,61 @@ function ProductDetails() {
   }
 
   return (
-    <div className="product-details-page">
-      <div className="product-details-container">
-        <button onClick={() => navigate(-1)} className="back-btn">← Back to Products</button>
-
-        <div className="product-details">
-          <div className="product-images">
-            {product.image_url && (
-              <img src={product.image_url} alt={product.name} className="main-image" />
-            )}
-            {product.images && product.images.length > 0 && (
-              <div className="additional-images">
-                {product.images.map((image, index) => (
-                  <img key={index} src={image.image_url} alt={`${product.name} ${index + 1}`} />
-                ))}
+    <div className="product-details-fullscreen">
+      <div className="product-details-topbar">
+        <h1>Product Details</h1>
+        <button className="back-btn" onClick={() => navigate(-1)}>Continue shopping</button>
+      </div>
+      <div className="product-details-main">
+        <div className="product-details-left">
+          <div className="product-details-card">
+            <div className="product-details-header">
+              <div className="product-title-row">
+                <h2>{product.name}</h2>
+                <span className="sku">#{product.sku || product.id}</span>
               </div>
-            )}
-          </div>
-
-          <div className="product-info">
-            <div className="header-row">
-              <div>
-                <h1>{product.name}</h1>
-              </div>
-              <div className="price-stock">
-                <div className="price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
-                <div className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
-                  {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
-                </div>
+              <div className="product-meta-row">
+                <span className="product-price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
+                <span className={`product-stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>{product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}</span>
               </div>
             </div>
-
-            {product.description && (
-              <div className="description">
-                <h3>Description</h3>
-                <p>{product.description}</p>
-              </div>
-            )}
-
-            {product.category_name && (
-              <div className="category">
-                <span>Category: {product.category_name}</span>
-              </div>
-            )}
-
-            <div className="actions">
-              <button
-                className="add-to-cart-btn"
-                onClick={handleAddToCart}
-                disabled={product.stock === 0}
-              >
-                {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-              </button>
-              <button className="buy-now-btn" disabled={product.stock === 0}>
-                Buy Now
-              </button>
+            <div className="product-details-body">
+              {product.image_url && (
+                <img src={product.image_url} alt={product.name} className="main-image" />
+              )}
+              {product.description && (
+                <div className="product-description">{product.description}</div>
+              )}
+              {product.category_name && (
+                <div className="product-category">Category: {product.category_name}</div>
+              )}
+            </div>
+            <div className="product-details-actions">
+              <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}>Add to Cart</button>
+              <button className="buy-now-btn" disabled={product.stock === 0}>Buy Now</button>
             </div>
           </div>
         </div>
+        <aside className="product-details-right">
+          <div className="summary-panel">
+            <div className="summary-row">
+              <span>Price</span>
+              <span>{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
+            </div>
+            <div className="summary-row">
+              <span>Stock</span>
+              <span>{product.stock > 0 ? `${product.stock} available` : 'Sold Out'}</span>
+            </div>
+            <div className="summary-row total">
+              <span>Total</span>
+              <span className="total-amount">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
+            </div>
+            <div className="checkout-row">
+              <button className="checkout-btn" disabled={product.stock === 0}>Checkout</button>
+              <div className="checkout-price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );
