@@ -7,6 +7,7 @@ import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
+import OrderHistory from './pages/OrderHistory';
 import { CartProvider } from './contexts/CartContext';
 import './App.css';
 
@@ -68,6 +69,10 @@ function App() {
           <Route 
             path="/cart" 
             element={<Cart onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
+          />
+          <Route 
+            path="/orders" 
+            element={isAuthenticated ? <OrderHistory onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
           />
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>

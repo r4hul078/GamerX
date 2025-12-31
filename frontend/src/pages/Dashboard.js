@@ -15,16 +15,6 @@ function Dashboard({ onLogout, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
-  // If user is admin, show admin dashboard instead
-  if (user && user.role === 'admin') {
-    return <AdminDashboard onLogout={onLogout} isAuthenticated={isAuthenticated} />;
-  }
-
-  useEffect(() => {
-    fetchCategories();
-    fetchProducts('All categories');
-  }, []);
-
   const fetchCategories = async () => {
     try {
       const response = await api.get('/categories/list/all');
@@ -53,6 +43,16 @@ function Dashboard({ onLogout, isAuthenticated }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts('All categories');
+  }, []);
+
+  // If user is admin, show admin dashboard instead
+  if (user && user.role === 'admin') {
+    return <AdminDashboard onLogout={onLogout} />;
+  }
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);

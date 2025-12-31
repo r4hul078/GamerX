@@ -9,6 +9,7 @@ function AdminDashboard({ onLogout }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalCategories: 0,
@@ -21,6 +22,7 @@ function AdminDashboard({ onLogout }) {
     if (userData) {
       setUser(JSON.parse(userData));
     }
+    setLoading(false);
     fetchStats();
   }, []);
 
@@ -51,6 +53,26 @@ function AdminDashboard({ onLogout }) {
     onLogout();
     navigate('/login');
   };
+
+  if (loading) {
+    return (
+      <div className="admin-dashboard">
+        <div style={{ textAlign: 'center', padding: '50px', color: 'white', fontSize: '18px' }}>
+          Loading admin dashboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="admin-dashboard">
+        <div style={{ textAlign: 'center', padding: '50px', color: 'white', fontSize: '18px' }}>
+          Error: User not found
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-dashboard">
