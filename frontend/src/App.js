@@ -10,11 +10,13 @@ import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
 import OrderHistory from './pages/OrderHistory';
 import { CartProvider } from './contexts/CartContext';
+import { useTheme } from './contexts/ThemeContext';
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -38,6 +40,11 @@ function App() {
   return (
     <CartProvider>
       <Router>
+        <div className="theme-toggle">
+          <button onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+          </button>
+        </div>
         <Routes>
           <Route 
             path="/login" 
