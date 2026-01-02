@@ -212,18 +212,22 @@ function Dashboard({ onLogout, isAuthenticated }) {
                     ) : (
                       <div className="deal-image-placeholder"></div>
                     )}
-                    <h3>{product.name}</h3>
-                    <p className="deal-category">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</p>
-                    <p style={{ fontSize: '12px', color: '#999' }}>
-                      Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
-                    </p>
-                    <button
-                      className="buy-btn"
-                      onClick={(e) => handleAddToCart(e, product)}
-                      disabled={product.stock === 0}
-                    >
-                      {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-                    </button>
+                    <div className="card-body">
+                      <h3>{product.name}</h3>
+                      <div className="meta-row">
+                        <div className="price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
+                        <div className={`stock-badge ${product.stock > 0 ? 'available' : 'sold-out'}`}>
+                          {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
+                        </div>
+                      </div>
+                      <button
+                        className="buy-btn"
+                        onClick={(e) => handleAddToCart(e, product)}
+                        disabled={product.stock === 0}
+                      >
+                        {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
