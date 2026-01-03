@@ -42,26 +42,32 @@ export const CartProvider = ({ children }) => {
 
     let added = false;
 
+    // Normalize image field so cart items always have `image`
+    const normalizedProduct = {
+      ...product,
+      image: product.image || product.image_url || product.imageUrl || ''
+    };
+
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const existingItem = prevItems.find(item => item.id === normalizedProduct.id);
 
       if (existingItem) {
         // Prevent increasing quantity beyond available stock
-        if (Number(existingItem.quantity) + 1 > Number(product.stock)) {
+        if (Number(existingItem.quantity) + 1 > Number(normalizedProduct.stock)) {
           alert('Cannot add more than available stock');
           return prevItems;
         }
 
         added = true;
         return prevItems.map(item =>
-          item.id === product.id
+          item.id === normalizedProduct.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
         added = true;
-        // Add new item with quantity 1
-        return [...prevItems, { ...product, quantity: 1 }];
+        // Add new item with quantity 1 (use normalized image field)
+        return [...prevItems, { ...normalizedProduct, quantity: 1 }];
       }
     });
 

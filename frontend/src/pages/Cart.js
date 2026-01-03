@@ -209,9 +209,11 @@ function Cart({ onLogout, isAuthenticated }) {
                   {cartItems.map((item) => (
                     <div key={item.id} className="cart-item">
                       <div className="cart-item-image">
-                        <img src={item.image} alt={item.name} onError={(e) => {
-                          e.target.src = '/images/placeholder.jpg';
-                        }} />
+                        <img
+                          src={item.image || item.image_url || item.imageUrl || '/images/placeholder.jpg'}
+                          alt={item.name}
+                          onError={(e) => { e.target.src = '/images/placeholder.jpg'; }}
+                        />
                       </div>
                       <div className="cart-item-details">
                         <h3>{item.name}</h3>
