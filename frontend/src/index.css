@@ -10,7 +10,15 @@
   --page-bg: #ffffff;
   --text-color: #111827;
   --muted-text: #6b7280;
-  --card-bg: rgba(255,255,255,0.8);
+  --card-bg: rgba(255,255,255,0.9);
+  --accent: #667eea;
+  --hero-text: #ffffff;
+  --danger: #ef4444;
+  --success: #28a745;
+  --success-text: #155724;
+  --warning: #ffc107;
+  --warning-text: #856404;
+  --border: rgba(0,0,0,0.06);
   /* Performance tweaks */
   --btn-transition: 0.18s;
   --shadow-elevation: 0 12px 30px rgba(2,6,23,0.08);
