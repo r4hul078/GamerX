@@ -31,5 +31,7 @@ const authorize = (allowedRoles = []) => (req, res, next) => {
   next();
 };
 
-module.exports = authenticateToken;
-module.exports.authorize = authorize;
+module.exports = {
+  authenticateToken,
+  authorize
+};
