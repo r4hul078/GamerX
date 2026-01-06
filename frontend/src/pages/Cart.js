@@ -126,157 +126,108 @@ function Cart({ onLogout, isAuthenticated }) {
   ];
 
   return (
-    <div className="dashboard-container">
-      {/* Top Header */}
-      <div className="top-header">
-        <div className="top-header-left">
-          <a href="#about">About Us</a>
-          <span className="divider">|</span>
-          <a href="#privacy">Privacy Policy</a>
-        </div>
-        <div className="top-header-right">
-          <a href="#warranty">Warranty</a>
-          <span className="divider">|</span>
-          <span className="customer-service">Customer's Service: +977-9800000000000</span>
-        </div>
+    <div className="cart-page">
+      {/* Top Row */}
+      <div className="cart-topbar">
+        <h1>My Cart</h1>
+        <button className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>Continue shopping</button>
       </div>
 
-      {/* Main Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo">🎮 GAMEGEARX</div>
-        </div>
+      {/* Main two-column area */}
+      <div className="cart-main">
+        <div className="cart-left">
+          <div className="cart-header">
+            <p className="cart-count">{getTotalItems()} item(s) in your cart</p>
+          </div>
 
-        <div className="search-container">
-          <input type="text" placeholder="What are you looking for?" className="search-bar" />
-          <button className="search-btn">🔍</button>
-        </div>
-
-        <div className="navbar-right">
-          <button className="nav-icon-btn active" onClick={handleViewCart}>
-            <span>🛒</span>
-            <span>My Cart ({getTotalItems()})</span>
-          </button>
-          <button className="nav-icon-btn" onClick={handleMyAccount}>
-            <span>👤</span>
-            <span>{isAuthenticated && user?.username ? user.username : 'My Account'}</span>
-          </button>
-          {isAuthenticated && (
-            <button className="logout-btn-nav" onClick={onLogout}>
-              Logout
-            </button>
-          )}
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <div className="dashboard-content">
-        <div className="content-wrapper">
-          {/* Sidebar Categories */}
-          <aside className="sidebar">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className="category-btn"
-                onClick={() => navigate('/dashboard')} // Navigate back to dashboard
-              >
-                {category}
+          {cartItems.length === 0 ? (
+            <div className="empty-cart">
+              <div className="empty-cart-icon">🛒</div>
+              <h2>Your cart is empty</h2>
+              <p>Add some products to get started!</p>
+              <button className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>
+                Continue Shopping
               </button>
-            ))}
-          </aside>
-
-          {/* Main Content Area */}
-          <div className="main-area">
-            {/* Cart Header */}
-            <div className="cart-header">
-              <h1>Shopping Cart</h1>
-              <p>{getTotalItems()} item(s) in your cart</p>
             </div>
+          ) : (
+            <>
+              <div className="cart-list">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="cart-item">
+                    <div className="cart-item-image">
+                      <img
+                        src={item.image || item.image_url || item.imageUrl || '/images/placeholder.jpg'}
+                        alt={item.name}
+                        onError={(e) => { e.target.src = '/images/placeholder.jpg'; }}
+                      />
+                    </div>
 
-            {/* Cart Items */}
-            {cartItems.length === 0 ? (
-              <div className="empty-cart">
-                <div className="empty-cart-icon">🛒</div>
-                <h2>Your cart is empty</h2>
-                <p>Add some products to get started!</p>
-                <button className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>
-                  Continue Shopping
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="cart-items">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="cart-item">
-                      <div className="cart-item-image">
-                        <img
-                          src={item.image || item.image_url || item.imageUrl || '/images/placeholder.jpg'}
-                          alt={item.name}
-                          onError={(e) => { e.target.src = '/images/placeholder.jpg'; }}
-                        />
-                      </div>
-                      <div className="cart-item-details">
+                    <div className="cart-item-info">
+                      <div className="cart-item-title">
                         <h3>{item.name}</h3>
-                        <p className="cart-item-category">{item.category}</p>
-                        <div className="cart-item-price">{isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price).toFixed(2)}`}</div>
+                        <p className="sku">#{item.sku || item.id}</p>
                       </div>
-                      <div className="cart-item-quantity">
-                        <button
-                          className="quantity-btn"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        >
-                          -
-                        </button>
-                        <span className="quantity-value">{item.quantity}</span>
-                        <button
-                          className="quantity-btn"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        >
-                          +
-                        </button>
-                      </div>
-                      <div className="cart-item-total">
-                        {isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price * item.quantity).toFixed(2)}`}
-                      </div>
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  ))}
-                </div>
 
-                {/* Cart Summary */}
-                <div className="cart-summary">
-                  <div className="cart-summary-content">
-                    <div className="summary-row">
-                      <span>Subtotal ({getTotalItems()} items):</span>
-                      <span>{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
-                    </div>
-                    <div className="summary-row">
-                      <span>Shipping:</span>
-                      <span>Free</span>
-                    </div>
-                    <div className="summary-row total">
-                      <span>Total:</span>
-                      <span>{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
-                    </div>
-                    <div className="cart-actions">
-                      <button className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>
-                        Continue Shopping
-                      </button>
-                      <button className="payment-btn" onClick={() => setShowPaymentModal(true)}>
-                        💳 Pay Now
-                      </button>
+                      <div className="cart-item-meta">
+                        <div className="cart-item-price">{isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price).toFixed(2)}`}</div>
+                        <div className="cart-item-quantity">
+                          <button className="quantity-btn" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                          <span className="quantity-value">{item.quantity}</span>
+                          <button className="quantity-btn" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                        </div>
+                        <div className="cart-item-total">{isNaN(Number(item.price)) ? '-' : `Rs ${Number(item.price * item.quantity).toFixed(2)}`}</div>
+                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>✕</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            )}
-          </div>
+                ))}
+              </div>
+
+              {/* Shipping selection */}
+              <div className="shipping-card">
+                <h3>Choose shipping mode:</h3>
+                <label className="ship-option">
+                  <input type="radio" name="shipping" defaultChecked />
+                  <div>
+                    <div className="ship-title">Store pickup (in 20 min)</div>
+                    <div className="ship-sub">FREE</div>
+                  </div>
+                </label>
+
+                <label className="ship-option">
+                  <input type="radio" name="shipping" />
+                  <div>
+                    <div className="ship-title">Delivery at home (1-2 days)</div>
+                    <div className="ship-sub">9.90€</div>
+                    <div className="ship-note">Add 45 Glenridge Ave, New York, NY 12220</div>
+                  </div>
+                </label>
+              </div>
+            </>
+          )}
         </div>
+
+        <aside className="cart-right">
+          <div className="summary-panel">
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
+            </div>
+            <div className="summary-row">
+              <span>Shipping</span>
+              <span>Free</span>
+            </div>
+            <div className="summary-row total">
+              <span>Total</span>
+              <span className="total-amount">{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</span>
+            </div>
+
+            <div className="checkout-row">
+              <button className="checkout-btn" onClick={() => setShowPaymentModal(true)}>Checkout</button>
+              <div className="checkout-price">{isNaN(Number(getTotalPrice())) ? '-' : `Rs ${Number(getTotalPrice()).toFixed(2)}`}</div>
+            </div>
+          </div>
+        </aside>
       </div>
 
 
