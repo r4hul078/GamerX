@@ -9,6 +9,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
 import OrderHistory from './pages/OrderHistory';
+import Profile from './pages/Profile';
 import { CartProvider } from './contexts/CartContext';
 import { useTheme } from './contexts/ThemeContext';
 import './App.css';
@@ -81,6 +82,10 @@ function App() {
           <Route 
             path="/orders" 
             element={isAuthenticated ? <OrderHistory onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/profile"
+            element={isAuthenticated ? <Profile onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
           />
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>

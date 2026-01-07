@@ -79,6 +79,8 @@ function Dashboard({ onLogout, isAuthenticated }) {
   const handleMyAccount = () => {
     if (!isAuthenticated) {
       navigate('/login');
+    } else {
+      navigate('/profile');
     }
   };
 
@@ -237,9 +239,11 @@ function Dashboard({ onLogout, isAuthenticated }) {
       </div>
 
       {/* Logout Button */}
-      <button onClick={handleLogout} className="logout-btn-float">
-        Logout
-      </button>
+
+    {/* Logout Button */}
+    <button onClick={handleLogout} className="logout-btn-float">
+      Logout
+    </button>
     </div>
   );
 }

@@ -106,7 +106,7 @@ function Cart({ onLogout, isAuthenticated }) {
     if (!isAuthenticated) {
       navigate('/login');
     } else {
-      navigate('/orders');
+      navigate('/profile');
     }
   };
 
@@ -279,15 +279,7 @@ function Cart({ onLogout, isAuthenticated }) {
         </div>
       </div>
 
-      {/* Logout Button */}
-      {isAuthenticated && (
-        <button onClick={() => {
-          onLogout();
-          navigate('/login');
-        }} className="logout-btn-float">
-          Logout
-        </button>
-      )}
+
 
       {/* Payment Modal */}
       {showPaymentModal && (
@@ -380,6 +372,16 @@ function Cart({ onLogout, isAuthenticated }) {
           </div>
         </div>
       )}
+    {/* Logout Button */}
+    {isAuthenticated && (
+      <button onClick={() => {
+        onLogout();
+        navigate('/login');
+      }} className="logout-btn-float">
+        Logout
+      </button>
+    )}
+
     </div>
   );
 }

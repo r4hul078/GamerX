@@ -1,0 +1,78 @@
+.profile-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.profile-hero {
+  width: 100%;
+  max-width: 960px;
+}
+
+.profile-card {
+  background: var(--page-bg);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: var(--shadow-elevation, 0 12px 30px rgba(2,6,23,0.08));
+}
+
+.profile-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+}
+
+.profile-sub {
+  color: var(--muted-text);
+  margin: 0 0 20px 0;
+}
+
+.profile-info {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 18px;
+  color: var(--text-color);
+}
+
+.info-row {
+  font-size: 15px;
+}
+
+.reset-form .input-group {
+  margin-bottom: 12px;
+}
+
+.reset-form .input-group label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.reset-form .profile-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Reuse existing buttons and spacing but slightly larger */
+.gradient-btn {
+  padding: 12px 20px;
+}
+
+.continue-shopping-btn {
+  padding: 12px 20px;
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-info {
+    flex-direction: column;
+  }
+}

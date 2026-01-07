@@ -348,6 +348,7 @@ function OrderHistory({ onLogout, isAuthenticated }) {
           Logout
         </button>
       )}
+
     </div>
   );
 }
