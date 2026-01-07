@@ -8,12 +8,12 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border);
 }
 
 .category-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--text-color);
 }
 
 .btn-primary {
@@ -39,9 +39,9 @@
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid rgba(0,0,0,0.04);
   padding: 12px 24px;
   border-radius: 5px;
   cursor: pointer;
@@ -51,8 +51,8 @@
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
-  border-color: #999;
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.08);
 }
 
 .alert {
@@ -75,16 +75,16 @@
 }
 
 .category-form {
-  background: #f9f9f9;
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 30px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--accent);
 }
 
 .category-form h3 {
   margin-top: 0;
-  color: #333;
+  color: var(--text-color);
 }
 
 .form-group {
@@ -94,7 +94,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--text-color);
   font-weight: 500;
 }
 
@@ -129,7 +129,7 @@
 .loading-text,
 .empty-text {
   text-align: center;
-  color: #999;
+  color: var(--muted-text);
   padding: 40px 20px;
   font-size: 16px;
 }
@@ -141,12 +141,12 @@
 }
 
 .category-card {
-  background: white;
-  border: 1px solid #eee;
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.04);
   border-radius: 8px;
   padding: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .category-card:hover {
@@ -164,27 +164,27 @@
 
 .category-card-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--text-color);
   font-size: 18px;
 }
 
 .category-id {
-  background: #f0f0f0;
-  color: #666;
+  background: rgba(0,0,0,0.03);
+  color: var(--muted-text);
   padding: 4px 8px;
   border-radius: 3px;
   font-size: 12px;
 }
 
 .category-description {
-  color: #666;
+  color: var(--muted-text);
   font-size: 14px;
   margin: 12px 0;
   line-height: 1.5;
 }
 
 .category-meta {
-  color: #999;
+  color: var(--muted-text);
   font-size: 12px;
   margin-bottom: 15px;
 }
@@ -209,23 +209,23 @@
 }
 
 .btn-edit {
-  background: #667eea;
-  color: white;
+  background: var(--accent);
+  color: var(--hero-text);
 }
 
 .btn-edit:hover {
-  background: #764ba2;
+  filter: brightness(0.94);
 }
 
 .btn-delete {
-  background: #f0f0f0;
-  color: #c00;
-  border: 1px solid #ddd;
+  background: var(--card-bg);
+  color: var(--danger);
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .btn-delete:hover {
-  background: #fee;
-  border-color: #c00;
+  background: rgba(239,68,68,0.06);
+  border-color: var(--danger);
 }
 
 @media (max-width: 768px) {
