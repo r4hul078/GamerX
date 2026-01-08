@@ -5,6 +5,8 @@ const validator = require('validator');
 const crypto = require('crypto');
 const pool = require('../config/database');
 const { authenticateToken: authenticate } = require('../middleware/auth');
+const multer = require('multer');
+const path = require('path');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
@@ -210,12 +212,51 @@ router.get('/verify', async (req, res) => {
 router.get('/me', authenticate, async (req, res) => {
   try {
     const userId = req.user.id;
-    const result = await pool.query('SELECT id, username, email, role, is_verified FROM users WHERE id = $1', [userId]);
+    const result = await pool.query('SELECT id, username, email, role, is_verified, profile_picture FROM users WHERE id = $1', [userId]);
     if (result.rows.length === 0) return res.status(404).json({ message: 'User not found' });
     res.json({ user: result.rows[0] });
   } catch (err) {
     console.error('Fetch user error:', err);
     res.status(500).json({ message: 'Failed to fetch user' });
+  }
+});
+
+// Setup multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '..', 'uploads'));
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const fname = `profile_${req.user.id}_${Date.now()}${ext}`;
+    cb(null, fname);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const allowed = /jpeg|jpg|png|gif/;
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowed.test(ext)) cb(null, true);
+    else cb(new Error('Only images are allowed'));
+  }
+});
+
+// Upload profile picture
+router.post('/upload-profile', authenticate, upload.single('avatar'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+    const relativePath = `/uploads/${req.file.filename}`;
+
+    await pool.query('UPDATE users SET profile_picture = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [relativePath, req.user.id]);
+
+    return res.json({ message: 'Profile image uploaded', profile_picture: relativePath });
+  } catch (err) {
+    console.error('Upload error:', err);
+    res.status(500).json({ message: 'Failed to upload image' });
   }
 });
 

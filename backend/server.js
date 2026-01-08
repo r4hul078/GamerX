@@ -11,10 +11,15 @@ const pool = require('./config/database');
 
 const app = express();
 
+const path = require('path');
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Test database connection
 pool.query('SELECT NOW()', (err, res) => {
