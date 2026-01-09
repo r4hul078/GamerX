@@ -14,10 +14,42 @@ function Profile() {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Password reset will be added in a follow-up commit
   const handleReset = async (e) => {
     e.preventDefault();
-    alert('Password reset feature coming soon');
+    setError(null);
+    setMessage(null);
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setError('New password must be at least 8 characters');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const resp = await axios.post('/api/auth/change-password', {
+        currentPassword,
+        newPassword,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setMessage(resp.data?.message || 'Password updated successfully');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update password');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
