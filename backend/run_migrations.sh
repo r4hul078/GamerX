@@ -22,6 +22,7 @@ echo "📦 Running migrations..."
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f migrations/seed_categories.sql > /dev/null 2>&1 && echo -e "${GREEN}✓${NC} Categories migration completed"
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f migrations/add_products_schema.sql > /dev/null 2>&1 && echo -e "${GREEN}✓${NC} Products migration completed"
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f migrations/create_orders_schema.sql > /dev/null 2>&1 && echo -e "${GREEN}✓${NC} Orders & Payments migration completed"
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f migrations/001_add_profile_picture.sql > /dev/null 2>&1 && echo -e "${GREEN}✓${NC} Profile picture migration completed"
 
 echo ""
 echo -e "${GREEN}✓ Database setup completed successfully!${NC}"
