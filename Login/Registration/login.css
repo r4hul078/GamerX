@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #ff00c8, #6f00ff);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 900px;
+    height: 520px;
+    background: #fff;
+    border-radius: 18px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 0 40px #00000040;
+}
+
+/* LEFT PANEL */
+.left-panel {
+    width: 45%;
+    padding: 40px;
+    background: linear-gradient(160deg, #24136b, #7f00ff);
+    color: #fff;
+    position: relative;
+}
+
+.left-panel .logo {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.left-panel h1 {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.left-panel p {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+
+/* RIGHT PANEL */
+.right-panel {
+    width: 55%;
+    padding: 60px 50px;
+}
+
+.right-panel h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    font-size: 14px;
+}
+
+.gradient-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: linear-gradient(135deg, #ff00c8, #6f00ff);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #888;
+}
+
+
+.toggle-text {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.toggle-text span {
+    color: #7f00ff;
+    font-weight: bold;
+    cursor: pointer;
+}
