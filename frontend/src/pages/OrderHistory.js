@@ -119,20 +119,6 @@ function OrderHistory({ onLogout, isAuthenticated }) {
 
   return (
     <div className="dashboard-container">
-      {/* Top Header */}
-      <div className="top-header">
-        <div className="top-header-left">
-          <a href="#about">About Us</a>
-          <span className="divider">|</span>
-          <a href="#privacy">Privacy Policy</a>
-        </div>
-        <div className="top-header-right">
-          <a href="#warranty">Warranty</a>
-          <span className="divider">|</span>
-          <span className="customer-service">Customer's Service: +977-9800000000000</span>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <nav className="navbar">
         <div className="navbar-left">

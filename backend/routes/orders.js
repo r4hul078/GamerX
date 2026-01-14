@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/database');
-const verifyToken = require('../middleware/auth');
+const { authenticateToken: verifyToken } = require('../middleware/auth');
 
 // Create an order from cart
 router.post('/create', verifyToken, async (req, res) => {
