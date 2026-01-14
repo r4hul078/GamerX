@@ -240,10 +240,6 @@ function Dashboard({ onLogout, isAuthenticated }) {
 
       {/* Logout Button */}
 
-    {/* Logout Button */}
-    <button onClick={handleLogout} className="logout-btn-float">
-      Logout
-    </button>
     </div>
   );
 }

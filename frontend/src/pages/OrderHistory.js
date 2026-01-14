@@ -342,12 +342,6 @@ function OrderHistory({ onLogout, isAuthenticated }) {
         </div>
       </div>
 
-      {/* Logout Button */}
-      {isAuthenticated && (
-        <button onClick={handleLogout} className="logout-btn-float">
-          Logout
-        </button>
-      )}
 
     </div>
   );

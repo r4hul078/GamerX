@@ -372,15 +372,6 @@ function Cart({ onLogout, isAuthenticated }) {
           </div>
         </div>
       )}
-    {/* Logout Button */}
-    {isAuthenticated && (
-      <button onClick={() => {
-        onLogout();
-        navigate('/login');
-      }} className="logout-btn-float">
-        Logout
-      </button>
-    )}
 
     </div>
   );
