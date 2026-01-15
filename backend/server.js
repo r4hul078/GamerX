@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/categories');
 const productRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
+const reviewsRouter = require('./routes/reviews');
 const pool = require('./config/database');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use('/api/reviews', reviewsRouter);
 
 // Health check
 app.get('/health', (req, res) => {
