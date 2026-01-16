@@ -65,8 +65,9 @@ function OrderManagement() {
       const response = await api.get(`/orders/admin/order-details/${orderId}`);
       setSelectedOrder(response.data.order);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch order details');
-      console.error('Error fetching order details:', err);
+      const msg = err.response?.data?.message || err.message || 'Failed to fetch order details';
+      setError(msg);
+      console.error('Error fetching order details:', err.response?.data || err.message || err);
     }
   };
 

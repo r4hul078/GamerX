@@ -4,18 +4,7 @@
   display: flex;
 }
 
-.admin-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--card-bg);
-  padding: 15px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  z-index: 100;
-  display: none;
-}
+
 
 .admin-header-content {
   max-width: 1400px;
@@ -38,21 +27,32 @@
   align-items: center;
 }
 
-.admin-name {
-  color: var(--text-color);
-  font-weight: 500;
+.admin-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  display: block;
 }
 
-.btn-logout {
-  background: var(--danger);
+
+.btn-profile {
+  background: var(--accent);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
+
+.btn-profile:hover { filter: brightness(0.95); transform: translateY(-1px); }
 
 .btn-logout:hover {
   filter: brightness(0.92);
