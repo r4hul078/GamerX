@@ -40,6 +40,8 @@ function Profile() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
+      console.log('[Change Password] Sending request...');
+      
       const resp = await axios.post('/api/auth/change-password', {
         currentPassword,
         newPassword,
@@ -49,20 +51,45 @@ function Profile() {
         }
       });
 
+      console.log('[Change Password] Success:', resp.data);
       setMessage(resp.data?.message || 'Password updated successfully');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update password');
+      console.error('[Change Password] Error:', err);
+      console.error('[Change Password] Response:', err.response?.data);
+      const errorMsg = err.response?.data?.detail || err.response?.data?.message || err.message || 'Failed to update password';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // load avatar preview from user if exists
-    if (user && user.profile_picture) setAvatarPreview(user.profile_picture);
+    // Fetch current user data from backend to get latest profile picture
+    const fetchCurrentUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const resp = await fetch('/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.user && data.user.profile_picture) {
+            setAvatarPreview(data.user.profile_picture);
+            // Update localStorage with latest user data
+            const stored = JSON.parse(localStorage.getItem('user') || '{}');
+            stored.profile_picture = data.user.profile_picture;
+            localStorage.setItem('user', JSON.stringify(stored));
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching current user:', err);
+      }
+    };
+
+    fetchCurrentUser();
     fetchOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -89,18 +116,40 @@ function Profile() {
       const token = localStorage.getItem('token');
       const isAdmin = user?.role === 'admin';
       const url = isAdmin ? `/api/orders/admin/order-details/${orderId}` : `/api/orders/${orderId}`;
+      
+      console.log('Fetching order details:', { orderId, url, isAdmin, token: !!token });
+      
       const resp = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
+      console.log('Order details response status:', resp.status);
+      
       if (!resp.ok) {
-        const errBody = await resp.json().catch(() => ({}));
-        throw new Error(errBody.message || 'Failed to fetch order details');
+        let errMessage = `HTTP ${resp.status}`;
+        try {
+          const errBody = await resp.json();
+          errMessage = errBody.detail || errBody.message || errMessage;
+          console.log('Error response body:', errBody);
+        } catch (e) {
+          const text = await resp.text();
+          console.log('Error response text:', text);
+        }
+        throw new Error(errMessage);
       }
+      
       const data = await resp.json();
+      console.log('Order details data:', data);
+      
+      if (!data.order) {
+        throw new Error('Invalid order data received from server');
+      }
+      
       setSelectedOrder(data.order);
+      setOrdersError(null);
     } catch (err) {
       console.error('Order details error:', err);
-      alert(err.message || 'Failed to fetch details');
+      setOrdersError(err.message || 'Failed to fetch order details');
     }
   };
 
@@ -168,10 +217,6 @@ function Profile() {
                 <div className="details-grid">
                   <div className="detail-item"><span className="label">My Role</span><span className="value">{user?.role || '-'}</span></div>
                   <div className="detail-item"><span className="label">Email</span><span className="value">{user?.email || '-'}</span></div>
-                  <div className="detail-item"><span className="label">My Experience Level</span><span className="value">-</span></div>
-                  <div className="detail-item"><span className="label">My Favorite Artists</span><span className="value">-</span></div>
-                  <div className="detail-item"><span className="label">My City or Region</span><span className="value">-</span></div>
-                  <div className="detail-item"><span className="label">Availability</span><span className="value available">Available for Collaboration</span></div>
                 </div>
               </div>
             </div>
@@ -213,41 +258,94 @@ function Profile() {
 
           {ordersLoading ? (
             <div className="loading">Loading orders...</div>
-          ) : ordersError ? (
-            <div className="error-message">{ordersError}</div>
-          ) : orders.length === 0 ? (
-            <div className="empty-orders">
-              <p>No orders found.</p>
-            </div>
           ) : (
             <div className="orders-list">
-              {!selectedOrder ? (
-                orders.map((order) => (
-                  <div className="order-card" key={order.id}>
-                    <div className="order-row">
-                      <div>
-                        <strong>Order #{order.id}</strong>
-                        <div className="order-date">{new Date(order.created_at).toLocaleDateString()}</div>
+              {ordersError && <div className="error-message">{ordersError}</div>}
+              {orders.length === 0 && !ordersError ? (
+                <div className="empty-orders">
+                  <p>No orders found.</p>
+                </div>
+              ) : (
+                <>
+                  {!selectedOrder ? (
+                    orders.map((order) => (
+                      <div className="order-card" key={order.id}>
+                        <div className="order-row">
+                          <div>
+                            <strong>Order #{order.id}</strong>
+                            <div className="order-date">{new Date(order.created_at).toLocaleDateString()}</div>
+                          </div>
+                          <div className="order-actions">
+                            <button className="small-btn" onClick={() => fetchOrderDetails(order.id)}>View</button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="order-actions">
-                        <button className="small-btn" onClick={() => fetchOrderDetails(order.id)}>View</button>
+                    ))
+                  ) : (
+                    <div className="order-details">
+                      <button className="back-btn" onClick={() => { setSelectedOrder(null); setOrdersError(null); }}>← Back to Orders</button>
+                      <div className="receipt-container">
+                    <div className="receipt-header">
+                      <h2>🎮 GamerX Receipt</h2>
+                      <p className="receipt-order-id">Order #{selectedOrder.id}</p>
+                    </div>
+
+                    <div className="receipt-section">
+                      <h4>Order Information</h4>
+                      <div className="receipt-info">
+                        <div className="info-row">
+                          <span className="label">Order Date:</span>
+                          <span className="value">{new Date(selectedOrder.created_at).toLocaleString()}</span>
+                        </div>
+                        <div className="info-row">
+                          <span className="label">Status:</span>
+                          <span className="value status">{selectedOrder.status}</span>
+                        </div>
+                        <div className="info-row">
+                          <span className="label">Payment Status:</span>
+                          <span className="value">{selectedOrder.payment_status || 'Pending'}</span>
+                        </div>
                       </div>
+                    </div>
+
+                    <div className="receipt-section">
+                      <h4>Items Ordered</h4>
+                      <div className="receipt-items">
+                        <div className="items-header">
+                          <div className="col-name">Product</div>
+                          <div className="col-qty">Qty</div>
+                          <div className="col-price">Price</div>
+                          <div className="col-total">Total</div>
+                        </div>
+                        {selectedOrder.items && selectedOrder.items.map((item, idx) => (
+                          <div key={idx} className="items-row">
+                            <div className="col-name">{item.name}</div>
+                            <div className="col-qty">{item.quantity}</div>
+                            <div className="col-price">Rs {Number(item.price).toFixed(2)}</div>
+                            <div className="col-total">Rs {(Number(item.price) * Number(item.quantity)).toFixed(2)}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="receipt-summary">
+                      <div className="summary-row">
+                        <span>Subtotal:</span>
+                        <span>Rs {Number(selectedOrder.total_amount).toFixed(2)}</span>
+                      </div>
+                      <div className="summary-row total">
+                        <span>Total Amount:</span>
+                        <span>Rs {Number(selectedOrder.total_amount).toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    <div className="receipt-footer">
+                      <p>Thank you for your purchase!</p>
                     </div>
                   </div>
-                ))
-              ) : (
-                <div className="order-details">
-                  <button className="small-btn" onClick={() => setSelectedOrder(null)}>← Back to Orders</button>
-                  <h3>Order #{selectedOrder.id}</h3>
-                  <p>Total: Rs {Number(selectedOrder.total_amount).toFixed(2)}</p>
-                  {selectedOrder.items && selectedOrder.items.map((it, idx) => (
-                    <div key={idx} className="order-item">
-                      <div>{it.name}</div>
-                      <div>Qty: {it.quantity}</div>
-                      <div>Rs {Number(it.price).toFixed(2)}</div>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
             </div>
           )}
