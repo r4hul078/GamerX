@@ -5,6 +5,8 @@ import Register from './pages/Register';
 import AdminRegister from './pages/AdminRegister';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import HomePage from './pages/HomePage';
 import './App.css';
 
 function App() {
