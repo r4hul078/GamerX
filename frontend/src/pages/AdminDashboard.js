@@ -116,6 +116,13 @@ function AdminDashboard({ onLogout }) {
             >
               📋 Orders
             </button>
+            <div className="nav-divider"></div>
+            <button
+              className="nav-item logout-item"
+              onClick={handleLogout}
+            >
+              🚪 Logout
+            </button>
           </nav>
         </div>
 
@@ -124,37 +131,37 @@ function AdminDashboard({ onLogout }) {
             <div className="overview-section">
               <h2>Dashboard Overview</h2>
               <div className="stats-grid">
-                <div className="stat-card">
+                <button className="stat-card" onClick={() => setActiveTab('products')}>
                   <div className="stat-icon">📦</div>
                   <div className="stat-info">
                     <h3>Total Products</h3>
                     <p className="stat-number">{stats.totalProducts}</p>
                   </div>
-                </div>
+                </button>
 
-                <div className="stat-card">
+                <button className="stat-card" onClick={() => setActiveTab('categories')}>
                   <div className="stat-icon">📁</div>
                   <div className="stat-info">
                     <h3>Total Categories</h3>
                     <p className="stat-number">{stats.totalCategories}</p>
                   </div>
-                </div>
+                </button>
 
-                <div className="stat-card">
+                <button className="stat-card" onClick={() => setActiveTab('products')}>
                   <div className="stat-icon">⭐</div>
                   <div className="stat-info">
                     <h3>Featured Products</h3>
                     <p className="stat-number">{stats.featuredProducts}</p>
                   </div>
-                </div>
+                </button>
 
-                <div className="stat-card">
+                <button className="stat-card" onClick={() => setActiveTab('products')}>
                   <div className="stat-icon">⚠️</div>
                   <div className="stat-info">
                     <h3>Low Stock Items</h3>
                     <p className="stat-number">{stats.lowStockProducts}</p>
                   </div>
-                </div>
+                </button>
               </div>
 
               <div className="quick-actions">

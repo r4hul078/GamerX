@@ -3,6 +3,8 @@
   background: var(--page-bg);
   border-radius: 10px;
   color: var(--text-color);
+}
+
 .order-header {
   display: flex;
   justify-content: space-between;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import GamerXImage from '../assets/Gamerx.png';
 import './AuthPages.css';
 
 function Login({ setIsAuthenticated }) {
@@ -43,11 +44,11 @@ function Login({ setIsAuthenticated }) {
   return (
     <div className="auth-container">
       <div className="auth-left-panel">
-        <div className="image-placeholder" aria-hidden="true"></div>
+        <img src={GamerXImage} alt="GamerX" className="auth-image" />
       </div>
 
       <div className="auth-right-panel">
-        <h2>Holla, <br/>Welcome Back</h2>
+        <h2>Hello there, <br/>Welcome Back</h2>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleLogin}>
