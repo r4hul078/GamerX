@@ -79,47 +79,6 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const processCheckout = async (paymentDetails) => {
-    try {
-      // Call the purchase API
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/products/purchase/process`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: cartItems.map(item => ({
-              id: item.id,
-              name: item.name,
-              quantity: item.quantity,
-              price: item.price
-            })),
-            totalAmount: getTotalPrice(),
-            paymentMethod: paymentDetails.paymentMethod,
-            cardLastFour: paymentDetails.cardLastFour
-          })
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Checkout failed');
-      }
-
-      const result = await response.json();
-
-      // Clear cart after successful payment
-      clearCart();
-
-      return result;
-    } catch (error) {
-      console.error('Checkout error:', error);
-      throw error;
-    }
-  };
-
   const value = {
     cartItems,
     addToCart,
@@ -127,8 +86,7 @@ export const CartProvider = ({ children }) => {
     updateQuantity,
     clearCart,
     getTotalItems,
-    getTotalPrice,
-    processCheckout
+    getTotalPrice
   };
 
   return (

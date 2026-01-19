@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
-import PaymentModal from '../components/PaymentModal';
 import './Cart.css';
 
 function Cart({ onLogout, isAuthenticated }) {
@@ -11,10 +10,8 @@ function Cart({ onLogout, isAuthenticated }) {
     removeFromCart,
     updateQuantity,
     getTotalItems,
-    getTotalPrice,
-    clearCart
+    getTotalPrice
   } = useCart();
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
@@ -31,21 +28,6 @@ function Cart({ onLogout, isAuthenticated }) {
 
   const handleViewCart = () => {
     // Already on cart page
-  };
-
-  const handlePaymentSuccess = (result) => {
-    // Clear cart after successful payment
-    clearCart();
-    alert(`Order successful!\nOrder ID: ${result.orderId}\nThank you for your purchase!`);
-    navigate('/dashboard');
-  };
-
-  const handlePayNow = () => {
-    if (cartItems.length === 0) {
-      alert('Your cart is empty!');
-      return;
-    }
-    setIsPaymentModalOpen(true);
   };
 
   const categories = [
@@ -202,8 +184,8 @@ function Cart({ onLogout, isAuthenticated }) {
                       <button className="checkout-btn">
                         Proceed to Checkout
                       </button>
-                      <button className="payment-btn" onClick={handlePayNow}>
-                        💳 Pay Now (₹{getTotalPrice().toFixed(2)})
+                      <button className="payment-btn" onClick={() => alert('Payment functionality coming soon!')}>
+                        💳 Pay Now
                       </button>
                     </div>
                   </div>
@@ -213,15 +195,6 @@ function Cart({ onLogout, isAuthenticated }) {
           </div>
         </div>
       </div>
-
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        totalAmount={getTotalPrice()}
-        cartItems={cartItems}
-        onClose={() => setIsPaymentModalOpen(false)}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
 
       {/* Logout Button */}
       {isAuthenticated && (
