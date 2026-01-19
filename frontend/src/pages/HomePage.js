@@ -28,6 +28,10 @@ function HomePage() {
     navigate(`/${authType}`);
   };
 
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <div className="home-page">
       <div className="home-hero">
@@ -66,7 +70,7 @@ function HomePage() {
         ) : (
           <div className="products-grid">
             {featuredProducts.map((product) => (
-              <div key={product.id} className="product-card">
+              <div key={product.id} className="product-card" onClick={() => handleProductClick(product.id)}>
                 {product.image_url && (
                   <div className="product-image">
                     <img src={product.image_url} alt={product.name} />

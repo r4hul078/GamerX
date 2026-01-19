@@ -92,6 +92,37 @@ router.get('/:id', authenticateToken, authorize(['admin']), async (req, res) => 
   }
 });
 
+// Get product details for public view
+router.get('/details/:id', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT p.*, c.name as category_name 
+       FROM products p 
+       LEFT JOIN categories c ON p.category_id = c.id 
+       WHERE p.id = $1`,
+      [req.params.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Get additional images
+    const imagesResult = await pool.query(
+      'SELECT * FROM product_images WHERE product_id = $1 ORDER BY is_primary DESC',
+      [req.params.id]
+    );
+
+    const product = result.rows[0];
+    product.images = imagesResult.rows;
+
+    res.json(product);
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+    res.status(500).json({ message: 'Error fetching product details' });
+  }
+});
+
 // Create a new product
 router.post('/', authenticateToken, authorize(['admin']), async (req, res) => {
   const { name, description, price, stock, category_id, image_url, is_featured } = req.body;

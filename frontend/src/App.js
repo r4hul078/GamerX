@@ -5,8 +5,7 @@ import Register from './pages/Register';
 import AdminRegister from './pages/AdminRegister';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import HomePage from './pages/HomePage';
+import ProductDetails from './pages/ProductDetails';
 import './App.css';
 
 function App() {
@@ -58,6 +57,10 @@ function App() {
         <Route 
           path="/admin-dashboard" 
           element={isAuthenticated ? <Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/product/:id" 
+          element={<ProductDetails />} 
         />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
