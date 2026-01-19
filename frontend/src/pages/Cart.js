@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import './Cart.css';
 
 function Cart({ onLogout, isAuthenticated }) {
   const navigate = useNavigate();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getTotalItems,
+    getTotalPrice
+  } = useCart();
+
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
   const handleLogout = () => {
@@ -31,56 +40,6 @@ function Cart({ onLogout, isAuthenticated }) {
     'Earbuds',
     'PC Build'
   ];
-
-  // Mock cart items - in a real app, this would come from state/context
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Gaming Mouse RGB',
-      price: 45.99,
-      quantity: 2,
-      image: '/images/mouse.jpg',
-      category: 'PC Accessories'
-    },
-    {
-      id: 2,
-      name: 'Mechanical Keyboard',
-      price: 89.99,
-      quantity: 1,
-      image: '/images/keyboard.jpg',
-      category: 'PC Accessories'
-    },
-    {
-      id: 3,
-      name: 'Gaming Headset',
-      price: 79.99,
-      quantity: 1,
-      image: '/images/headset.jpg',
-      category: 'Audio'
-    }
-  ]);
-
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity <= 0) {
-      removeItem(id);
-      return;
-    }
-    setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
-  };
-
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  };
 
   return (
     <div className="dashboard-container">
@@ -195,7 +154,7 @@ function Cart({ onLogout, isAuthenticated }) {
                       </div>
                       <button
                         className="remove-btn"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeFromCart(item.id)}
                       >
                         🗑️
                       </button>
@@ -224,6 +183,9 @@ function Cart({ onLogout, isAuthenticated }) {
                       </button>
                       <button className="checkout-btn">
                         Proceed to Checkout
+                      </button>
+                      <button className="payment-btn" onClick={() => alert('Payment functionality coming soon!')}>
+                        💳 Pay Now
                       </button>
                     </div>
                   </div>

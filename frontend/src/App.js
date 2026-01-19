@@ -7,6 +7,7 @@ import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
+import { CartProvider } from './contexts/CartContext';
 import './App.css';
 
 function App() {
@@ -33,43 +34,45 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route 
-          path="/login" 
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login setIsAuthenticated={setIsAuthenticated} />} 
-        />
-        <Route 
-          path="/register" 
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
-        />
-        <Route 
-          path="/admin-register" 
-          element={isAuthenticated ? <Navigate to="/admin-dashboard" /> : <AdminRegister />} 
-        />
-        <Route 
-          path="/verify" 
-          element={<Verify />} 
-        />
-        <Route 
-          path="/dashboard" 
-          element={<Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
-        />
-        <Route 
-          path="/admin-dashboard" 
-          element={isAuthenticated ? <Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
-        />
-        <Route 
-          path="/product/:id" 
-          element={<ProductDetails />} 
-        />
-        <Route 
-          path="/cart" 
-          element={<Cart onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
-        />
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <Router>
+        <Routes>
+          <Route 
+            path="/login" 
+            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login setIsAuthenticated={setIsAuthenticated} />} 
+          />
+          <Route 
+            path="/register" 
+            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
+          />
+          <Route 
+            path="/admin-register" 
+            element={isAuthenticated ? <Navigate to="/admin-dashboard" /> : <AdminRegister />} 
+          />
+          <Route 
+            path="/verify" 
+            element={<Verify />} 
+          />
+          <Route 
+            path="/dashboard" 
+            element={<Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
+          />
+          <Route 
+            path="/admin-dashboard" 
+            element={isAuthenticated ? <Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/product/:id" 
+            element={<ProductDetails />} 
+          />
+          <Route 
+            path="/cart" 
+            element={<Cart onLogout={handleLogout} isAuthenticated={isAuthenticated} />} 
+          />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

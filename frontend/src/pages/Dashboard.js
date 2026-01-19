@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import './Dashboard.css';
 
 function Dashboard({ onLogout, isAuthenticated }) {
   const navigate = useNavigate();
+  const { getTotalItems } = useCart();
   const [activeCategory, setActiveCategory] = useState(null);
   const user = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}') : null;
 
@@ -78,7 +80,7 @@ function Dashboard({ onLogout, isAuthenticated }) {
         <div className="navbar-right">
           <button className="nav-icon-btn" onClick={handleCartClick}>
             <span>🛒</span>
-            <span>My Cart</span>
+            <span>My Cart ({getTotalItems()})</span>
           </button>
           <button className="nav-icon-btn" onClick={handleMyAccount}>
             <span>👤</span>

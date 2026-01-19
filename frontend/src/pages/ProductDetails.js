@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import api from '../services/api';
 import './ProductDetails.css';
 
 function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +28,11 @@ function ProductDetails() {
   useEffect(() => {
     fetchProductDetails();
   }, [fetchProductDetails]);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    alert(`${product.name} added to cart!`);
+  };
 
   if (loading) {
     return (
@@ -86,6 +93,7 @@ function ProductDetails() {
             <div className="actions">
               <button
                 className="add-to-cart-btn"
+                onClick={handleAddToCart}
                 disabled={product.stock === 0}
               >
                 {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}

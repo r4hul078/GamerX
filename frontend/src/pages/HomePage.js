@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import api from '../services/api';
 import './HomePage.css';
 
 function HomePage() {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +32,12 @@ function HomePage() {
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation(); // Prevent triggering the card click
+    addToCart(product);
+    alert(`${product.name} added to cart!`);
   };
 
   return (
@@ -84,10 +92,19 @@ function HomePage() {
                     </p>
                   )}
                   <div className="product-footer">
-                    <span className="price">₹{product.price.toFixed(2)}</span>
-                    <span className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
-                      {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
-                    </span>
+                    <div className="product-footer-top">
+                      <span className="price">₹{product.price.toFixed(2)}</span>
+                      <span className={`stock ${product.stock > 0 ? 'available' : 'sold-out'}`}>
+                        {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
+                      </span>
+                    </div>
+                    <button
+                      className="add-to-cart-btn"
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled={product.stock === 0}
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               </div>

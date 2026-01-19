@@ -214,6 +214,7 @@
   display: flex;
   gap: 15px;
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 .checkout-btn {
@@ -231,6 +232,23 @@
 
 .checkout-btn:hover {
   background: #218838;
+}
+
+.payment-btn {
+  flex: 1;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.payment-btn:hover {
+  background: #0056b3;
 }
 
 /* Active cart button */
