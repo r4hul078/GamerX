@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import CategoryManagement from './admin/CategoryManagement';
 import ProductManagement from './admin/ProductManagement';
+import OrderManagement from './admin/OrderManagement';
 import './AdminDashboard.css';
 
 function AdminDashboard({ onLogout }) {
@@ -109,6 +110,12 @@ function AdminDashboard({ onLogout }) {
             >
               📦 Products
             </button>
+            <button
+              className={`nav-item ${activeTab === 'orders' ? 'active' : ''}`}
+              onClick={() => setActiveTab('orders')}
+            >
+              📋 Orders
+            </button>
           </nav>
         </div>
 
@@ -179,6 +186,8 @@ function AdminDashboard({ onLogout }) {
           {activeTab === 'categories' && <CategoryManagement onUpdate={fetchStats} />}
 
           {activeTab === 'products' && <ProductManagement onUpdate={fetchStats} />}
+
+          {activeTab === 'orders' && <OrderManagement />}
         </div>
       </div>
     </div>

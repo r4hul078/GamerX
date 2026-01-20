@@ -107,6 +107,112 @@ router.post('/confirm-payment/:orderId', verifyToken, async (req, res) => {
   }
 });
 
+// Get all orders (admin only)
+router.get('/admin/all-orders', verifyToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    const userResult = await pool.query(
+      'SELECT role FROM users WHERE id = $1',
+      [req.userId]
+    );
+
+    if (userResult.rows.length === 0 || userResult.rows[0].role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    }
+
+    const result = await pool.query(
+      `SELECT 
+        o.id, 
+        o.user_id,
+        u.username,
+        u.email,
+        o.total_amount, 
+        o.status, 
+        o.payment_method, 
+        o.created_at,
+        (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) as item_count,
+        p.status as payment_status
+      FROM orders o 
+      JOIN users u ON o.user_id = u.id
+      LEFT JOIN payments p ON o.id = p.order_id
+      ORDER BY o.created_at DESC`
+    );
+
+    res.json({
+      success: true,
+      orders: result.rows
+    });
+  } catch (error) {
+    console.error('Error fetching all orders:', error);
+    res.status(500).json({ message: 'Error fetching orders' });
+  }
+});
+
+// Get specific order details (admin can view any order)
+router.get('/admin/order-details/:orderId', verifyToken, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // Check if user is admin
+    const userResult = await pool.query(
+      'SELECT role FROM users WHERE id = $1',
+      [req.userId]
+    );
+
+    if (userResult.rows.length === 0 || userResult.rows[0].role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT 
+        o.id,
+        o.user_id,
+        u.username,
+        u.email,
+        o.total_amount,
+        o.status,
+        o.payment_method,
+        o.created_at,
+        o.updated_at
+      FROM orders o
+      JOIN users u ON o.user_id = u.id
+      WHERE o.id = $1`,
+      [orderId]
+    );
+
+    if (orderResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const order = orderResult.rows[0];
+
+    const itemsResult = await pool.query(
+      `SELECT oi.*, p.name, p.image, p.price as current_price
+       FROM order_items oi
+       JOIN products p ON oi.product_id = p.id
+       WHERE oi.order_id = $1`,
+      [orderId]
+    );
+
+    const paymentResult = await pool.query(
+      'SELECT * FROM payments WHERE order_id = $1',
+      [orderId]
+    );
+
+    res.json({
+      success: true,
+      order: {
+        ...order,
+        items: itemsResult.rows,
+        payment: paymentResult.rows[0]
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ message: 'Error fetching order details' });
+  }
+});
+
 // Get user's order history
 router.get('/history', verifyToken, async (req, res) => {
   try {
