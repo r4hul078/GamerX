@@ -93,6 +93,70 @@
   margin-bottom: 20px;
 }
 
+.sidebar-profile {
+  padding: 10px;
+  margin-bottom: 20px;
+  background: transparent;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sidebar-profile:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
+}
+
+.profile-avatar {
+  font-size: 48px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.profile-info {
+  text-align: center;
+  width: 100%;
+}
+
+.profile-info h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.profile-info p {
+  margin: 5px 0;
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.admin-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
 .admin-nav {
   display: flex;
   flex-direction: column;
@@ -303,6 +367,79 @@
 .admin-sidebar::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 3px;
+}
+
+/* Profile Section */
+.profile-section {
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-section h2 {
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.profile-card-admin {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 12px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-large {
+  font-size: 80px;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profile-details-admin {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-row label {
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.detail-row span {
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.admin-badge-large {
+  background: var(--accent);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  width: fit-content;
 }
 
 /* Responsive */

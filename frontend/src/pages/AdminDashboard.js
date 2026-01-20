@@ -4,6 +4,7 @@ import api from '../services/api';
 import CategoryManagement from './admin/CategoryManagement';
 import ProductManagement from './admin/ProductManagement';
 import OrderManagement from './admin/OrderManagement';
+import Profile from './Profile';
 import './AdminDashboard.css';
 
 function AdminDashboard({ onLogout }) {
@@ -77,20 +78,15 @@ function AdminDashboard({ onLogout }) {
 
   return (
     <div className="admin-dashboard">
-      <div className="admin-header">
-        <div className="admin-header-content">
-          <h1>🎮 GamerX Admin Dashboard</h1>
-          <div className="admin-header-right">
-            <span className="admin-name">Welcome, {user?.username}</span>
-            <button className="btn-logout" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div className="admin-container">
         <div className="admin-sidebar">
+          <button
+            className="sidebar-profile"
+            onClick={() => setActiveTab('profile')}
+            title="View Profile"
+          >
+            <div className="profile-avatar">👤</div>
+          </button>
           <nav className="admin-nav">
             <button
               className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
@@ -189,6 +185,8 @@ function AdminDashboard({ onLogout }) {
               </div>
             </div>
           )}
+
+          {activeTab === 'profile' && <Profile />}
 
           {activeTab === 'categories' && <CategoryManagement onUpdate={fetchStats} />}
 
