@@ -111,12 +111,7 @@ router.post('/confirm-payment/:orderId', verifyToken, async (req, res) => {
 router.get('/admin/all-orders', verifyToken, async (req, res) => {
   try {
     // Check if user is admin
-    const userResult = await pool.query(
-      'SELECT role FROM users WHERE id = $1',
-      [req.userId]
-    );
-
-    if (userResult.rows.length === 0 || userResult.rows[0].role !== 'admin') {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Unauthorized: Admin access required' });
     }
 
@@ -154,12 +149,7 @@ router.get('/admin/order-details/:orderId', verifyToken, async (req, res) => {
     const { orderId } = req.params;
 
     // Check if user is admin
-    const userResult = await pool.query(
-      'SELECT role FROM users WHERE id = $1',
-      [req.userId]
-    );
-
-    if (userResult.rows.length === 0 || userResult.rows[0].role !== 'admin') {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Unauthorized: Admin access required' });
     }
 

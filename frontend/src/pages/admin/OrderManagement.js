@@ -8,10 +8,43 @@ function OrderManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    fetchAllOrders();
+    checkAuthAndFetchOrders();
   }, []);
+
+  const checkAuthAndFetchOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Check if user is authenticated and is admin
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (user.role !== 'admin') {
+        setError('Unauthorized: Admin access required');
+        setIsAuthorized(false);
+        setLoading(false);
+        return;
+      }
+      
+      setIsAuthorized(true);
+      
+      // Fetch orders
+      try {
+        const response = await api.get('/orders/admin/all-orders');
+        setOrders(response.data.orders);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch orders');
+        console.error('Error fetching orders:', err);
+      }
+    } catch (err) {
+      setError('Authorization failed');
+      console.error('Auth error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchAllOrders = async () => {
     try {
@@ -59,6 +92,14 @@ function OrderManagement() {
   };
 
   const filteredOrders = getFilteredOrders();
+
+  if (!isAuthorized) {
+    return (
+      <div className="order-management">
+        <div className="error-message">{error || 'Unauthorized: Admin access required'}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="order-management">
@@ -127,7 +168,7 @@ function OrderManagement() {
                     </div>
                   </div>
                   <div className="table-cell">
-                    <strong>${order.total_amount.toFixed(2)}</strong>
+                    <strong>${Number(order.total_amount).toFixed(2)}</strong>
                   </div>
                   <div className="table-cell">
                     <span className="item-count">{order.item_count} items</span>
@@ -217,7 +258,7 @@ function OrderManagement() {
                   </div>
                   <div className="info-item">
                     <label>Total Amount:</label>
-                    <span className="amount">${selectedOrder.total_amount.toFixed(2)}</span>
+                    <span className="amount">${Number(selectedOrder.total_amount).toFixed(2)}</span>
                   </div>
                   {selectedOrder.payment && (
                     <>
@@ -262,9 +303,9 @@ function OrderManagement() {
                         <span>{item.name}</span>
                       </div>
                       <div>{item.quantity}</div>
-                      <div>${item.price.toFixed(2)}</div>
+                      <div>${Number(item.price).toFixed(2)}</div>
                       <div className="item-total">
-                        ${(item.quantity * item.price).toFixed(2)}
+                        ${(Number(item.quantity) * Number(item.price)).toFixed(2)}
                       </div>
                     </div>
                   ))}

@@ -26,7 +26,13 @@ function Login({ setIsAuthenticated }) {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       setIsAuthenticated(true);
-      navigate('/dashboard');
+      
+      // Redirect based on user role
+      if (response.data.user.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
@@ -40,9 +46,9 @@ function Login({ setIsAuthenticated }) {
         <div className="logo">GamerX</div>
         <h1>Welcome Back, Gamer!</h1>
         <p>Sign in to continue your journey</p>
-        {/* Add your image here */}
+        {/* Gaming image */}
         <div className="image-placeholder">
-          <img src="" alt="Gaming" id="auth-image" />
+          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Gaming" id="auth-image" />
         </div>
       </div>
 

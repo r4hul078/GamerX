@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import AdminRegister from './pages/AdminRegister';
 import Verify from './pages/Verify';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
 import OrderHistory from './pages/OrderHistory';
@@ -60,7 +61,7 @@ function App() {
           />
           <Route 
             path="/admin-dashboard" 
-            element={isAuthenticated ? <Dashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
+            element={isAuthenticated ? <AdminDashboard onLogout={handleLogout} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" />} 
           />
           <Route 
             path="/product/:id" 

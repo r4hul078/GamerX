@@ -47,11 +47,17 @@ function Register() {
         role: 'user',
       });
 
-      // If backend returned a token (auto-verified or admin), log in
-      if (response.data.token) {
+      // If admin registered, log in directly
+      if (response.data.user.role === 'admin' && response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         navigate('/dashboard');
+        return;
+      }
+
+      // Regular users go to login page
+      if (response.data.user.role === 'user') {
+        navigate('/login');
         return;
       }
 
@@ -73,9 +79,9 @@ function Register() {
         <div className="logo">GamerX</div>
         <h1>Join the Game!</h1>
         <p>Create your account and start playing</p>
-        {/* Add your image here */}
+        {/* Gaming image */}
         <div className="image-placeholder">
-          <img src="" alt="Gaming" id="auth-image" />
+          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Gaming" id="auth-image" />
         </div>
       </div>
 

@@ -34,6 +34,9 @@ echo "Dropping all tables..."
 
 # Drop all tables (handles foreign key constraints)
 PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME << EOF
+DROP TABLE IF EXISTS payments CASCADE;
+DROP TABLE IF EXISTS order_items CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS product_images CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
@@ -42,6 +45,23 @@ EOF
 
 echo "✅ All tables dropped"
 echo ""
-echo "You can now run the setup.sh script to create fresh tables:"
-echo "  bash setup.sh"
+
+# Optionally recreate fresh tables
+read -p "Do you want to recreate the tables now? (yes/no): " RECREATE
+
+if [ "$RECREATE" = "yes" ]; then
+    echo ""
+    echo "Recreating tables..."
+    
+    PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -f ../db_schema.sql
+    PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -f migrations/add_products_schema.sql
+    PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -f migrations/create_orders_schema.sql
+    
+    echo "✅ All tables recreated"
+    echo ""
+    echo "ℹ️  Categories will be seeded when the first admin user is registered."
+else
+    echo "You can run the setup.sh script later to create fresh tables:"
+    echo "  bash setup.sh"
+fi
 echo ""

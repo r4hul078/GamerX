@@ -15,6 +15,7 @@ const authenticateToken = (req, res, next) => {
       return res.status(403).json({ message: 'Invalid or expired token' });
     }
     req.user = user;
+    req.userId = user.id; // Set userId for backward compatibility
     next();
   });
 };

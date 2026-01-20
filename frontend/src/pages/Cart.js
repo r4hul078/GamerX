@@ -162,7 +162,7 @@ function Cart({ onLogout, isAuthenticated }) {
             <span>{isAuthenticated && user?.username ? user.username : 'My Account'}</span>
           </button>
           {isAuthenticated && (
-            <button className="logout-btn-nav" onClick={handleLogout}>
+            <button className="logout-btn-nav" onClick={onLogout}>
               Logout
             </button>
           )}
@@ -337,15 +337,6 @@ function Cart({ onLogout, isAuthenticated }) {
                           onChange={(e) => setPaymentMethod(e.target.value)}
                         />
                         <span>Credit/Debit Card</span>
-                      </label>
-                      <label className="method-option">
-                        <input 
-                          type="radio" 
-                          value="upi" 
-                          checked={paymentMethod === 'upi'}
-                          onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                        <span>UPI</span>
                       </label>
                       <label className="method-option">
                         <input 

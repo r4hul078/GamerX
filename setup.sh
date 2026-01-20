@@ -74,6 +74,7 @@ echo ""
 # Run migrations
 echo "Running migrations..."
 PGPASSWORD=$DB_PASSWORD psql -U $DB_GAMERX_USER -d $DB_NAME -h localhost -f backend/migrations/add_products_schema.sql
+PGPASSWORD=$DB_PASSWORD psql -U $DB_GAMERX_USER -d $DB_NAME -h localhost -f backend/migrations/create_orders_schema.sql
 echo "✅ Migrations completed"
 echo ""
 

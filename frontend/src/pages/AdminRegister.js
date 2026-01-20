@@ -70,7 +70,7 @@ function AdminRegister() {
         <h1>Become a Store Admin</h1>
         <p>Manage your gaming store efficiently</p>
         <div className="image-placeholder">
-          <img src="" alt="Admin" id="auth-image" />
+          <img src="https://sc01.alicdn.com/kf/Hd0048c3bd18e421e9c05607c0120ff7de.jpg" alt="Admin" id="auth-image" />
         </div>
       </div>
 
