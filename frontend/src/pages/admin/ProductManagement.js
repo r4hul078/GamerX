@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { deleteReview } from '../../services/reviews';
 import './ProductManagement.css';
 
 function ProductManagement({ onUpdate }) {
@@ -20,6 +21,9 @@ function ProductManagement({ onUpdate }) {
     image_url: '',
     is_featured: false,
   });
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [showReviews, setShowReviews] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -155,6 +159,20 @@ function ProductManagement({ onUpdate }) {
         setError('Error updating stock');
       }
     }
+  };
+
+  const handleShowReviews = async (product) => {
+    setSelectedProduct(product);
+    setShowReviews(true);
+    const res = await fetch(`/api/reviews/product/${product.id}`);
+    const data = await res.json();
+    setReviews(data);
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Delete this review?')) return;
+    await deleteReview(reviewId);
+    setReviews(reviews.filter((r) => r.id !== reviewId));
   };
 
   const resetForm = () => {
@@ -422,6 +440,13 @@ function ProductManagement({ onUpdate }) {
                       >
                         🗑️
                       </button>
+                      <button
+                        className="btn-action btn-reviews"
+                        onClick={() => handleShowReviews(product)}
+                        title="View Reviews"
+                      >
+                        ⭐
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -430,6 +455,36 @@ function ProductManagement({ onUpdate }) {
           </div>
         )}
       </div>
+
+      {showReviews && selectedProduct && (
+        <div className="admin-reviews-modal">
+          <h3>Reviews for {selectedProduct.name}</h3>
+          <ul className="reviews-list">
+            {reviews.map((r) => (
+              <li key={r.id} className="review-item">
+                <div className="review-header">
+                  <span className="review-user">{r.username || 'User'}</span>
+                  <span className="review-rating">
+                    {'★'.repeat(r.rating)}
+                    {'☆'.repeat(5 - r.rating)}
+                  </span>
+                  <span className="review-date">
+                    {new Date(r.created_at).toLocaleDateString()}
+                  </span>
+                  <button
+                    className="delete-review-btn"
+                    onClick={() => handleDeleteReview(r.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div className="review-comment">{r.comment}</div>
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => setShowReviews(false)}>Close</button>
+        </div>
+      )}
     </div>
   );
 }

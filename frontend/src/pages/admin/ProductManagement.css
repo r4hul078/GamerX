@@ -331,6 +331,37 @@
   background: rgba(231, 76, 60, 0.1);
 }
 
+/* Admin reviews modal */
+.admin-reviews-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+  padding: 32px 28px;
+  z-index: 1002;
+  min-width: 340px;
+  max-width: 90vw;
+}
+.admin-reviews-modal h3 {
+  margin-top: 0;
+}
+.delete-review-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  margin-left: 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.delete-review-btn:hover {
+  background: #c0392b;
+}
+
 @media (max-width: 1024px) {
   .form-row {
     grid-template-columns: 1fr;
