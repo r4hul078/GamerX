@@ -371,3 +371,42 @@
     width: 95%;
   }
 }
+/* Status Actions */
+.status-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.status-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-select:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(61, 220, 132, 0.1);
+}
+
+.status-select option {
+  background: var(--card-bg);
+  color: var(--text-color);
+  padding: 8px;
+}
+
+.status-select option:checked {
+  background: var(--accent);
+  color: white;
+}

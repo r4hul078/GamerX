@@ -92,6 +92,25 @@ function OrderManagement() {
     setSelectedOrder(null);
   };
 
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      setError(null);
+      await api.put(`/orders/admin/update-status/${orderId}`, { status: newStatus });
+      
+      // Update the order in the list
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
+      
+      // Show success message
+      console.log(`Order #${orderId} status updated to ${newStatus}`);
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to update order status';
+      setError(msg);
+      console.error('Error updating order status:', err);
+    }
+  };
+
   const filteredOrders = getFilteredOrders();
 
   if (!isAuthorized) {
@@ -197,13 +216,22 @@ function OrderManagement() {
                     <small>{new Date(order.created_at).toLocaleDateString()}</small>
                   </div>
                   <div className="table-cell">
-                    <button
-                      className="btn-view"
-                      onClick={() => fetchOrderDetails(order.id)}
-                    >
-                      View Details
-                    </button>
+                    <div className="status-actions">
+                      <select 
+                        className="status-select"
+                        value={order.status}
+                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        title="Update Order Status"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
                   </div>
+
                 </div>
               ))}
             </div>
