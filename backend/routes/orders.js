@@ -148,8 +148,11 @@ router.get('/admin/order-details/:orderId', verifyToken, async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    console.debug('[orders] admin/order-details', { orderId, user: req.user });
+
     // Check if user is admin
     if (!req.user || req.user.role !== 'admin') {
+      console.error('[orders] Unauthorized: user role is', req.user?.role);
       return res.status(403).json({ message: 'Unauthorized: Admin access required' });
     }
 
@@ -177,7 +180,7 @@ router.get('/admin/order-details/:orderId', verifyToken, async (req, res) => {
     const order = orderResult.rows[0];
 
     const itemsResult = await pool.query(
-      `SELECT oi.*, p.name, p.image, p.price as current_price
+      `SELECT oi.*, p.name, p.price as current_price
        FROM order_items oi
        JOIN products p ON oi.product_id = p.id
        WHERE oi.order_id = $1`,
@@ -189,17 +192,23 @@ router.get('/admin/order-details/:orderId', verifyToken, async (req, res) => {
       [orderId]
     );
 
+    // Add payment_status to order object
+    const orderWithPayment = {
+      ...order,
+      payment_status: paymentResult.rows[0]?.status || 'pending'
+    };
+
     res.json({
       success: true,
       order: {
-        ...order,
+        ...orderWithPayment,
         items: itemsResult.rows,
         payment: paymentResult.rows[0]
       }
     });
   } catch (error) {
     console.error('Error fetching order details:', error);
-    res.status(500).json({ message: 'Error fetching order details' });
+    res.status(500).json({ message: 'Error fetching order details', detail: error.message });
   }
 });
 
@@ -238,41 +247,103 @@ router.get('/:orderId', verifyToken, async (req, res) => {
     const { orderId } = req.params;
     const userId = req.userId;
 
+    console.log('[User Order Details] Fetching order:', { orderId, userId });
+
     const orderResult = await pool.query(
       'SELECT * FROM orders WHERE id = $1 AND user_id = $2',
       [orderId, userId]
     );
 
     if (orderResult.rows.length === 0) {
+      console.log('[User Order Details] Order not found:', { orderId, userId });
       return res.status(404).json({ message: 'Order not found' });
     }
 
     const order = orderResult.rows[0];
+    console.log('[User Order Details] Order found:', order.id);
 
     const itemsResult = await pool.query(
-      `SELECT oi.*, p.name, p.image 
+      `SELECT oi.*, p.name
        FROM order_items oi
        JOIN products p ON oi.product_id = p.id
        WHERE oi.order_id = $1`,
       [orderId]
     );
 
+    console.log('[User Order Details] Items found:', itemsResult.rows.length);
+
     const paymentResult = await pool.query(
       'SELECT * FROM payments WHERE order_id = $1',
       [orderId]
     );
 
+    console.log('[User Order Details] Payment found:', paymentResult.rows.length);
+
+    // Add payment_status to order object
+    const orderWithPayment = {
+      ...order,
+      payment_status: paymentResult.rows[0]?.status || 'pending'
+    };
+
     res.json({
       success: true,
       order: {
-        ...order,
+        ...orderWithPayment,
         items: itemsResult.rows,
         payment: paymentResult.rows[0]
       }
     });
   } catch (error) {
-    console.error('Error fetching order details:', error);
-    res.status(500).json({ message: 'Error fetching order details' });
+    console.error('[User Order Details] Error:', error.message, error.stack);
+    res.status(500).json({ 
+      message: 'Error fetching order details',
+      detail: error.message 
+    });
+  }
+});
+
+// Update order status (Admin only)
+router.put('/admin/update-status/:orderId', verifyToken, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    // Check if user is admin
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized: Admin access required' });
+    }
+
+    // Validate status
+    const validStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    console.log('[Admin Update Status] Updating order:', { orderId, newStatus: status });
+
+    // Update order status
+    const result = await pool.query(
+      'UPDATE orders SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id, status',
+      [status, orderId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    console.log('[Admin Update Status] Order updated successfully:', result.rows[0]);
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} status updated to ${status}`,
+      order: result.rows[0]
+    });
+  } catch (error) {
+    console.error('[Admin Update Status] Error:', error.message);
+    res.status(500).json({ 
+      message: 'Error updating order status',
+      detail: error.message 
+    });
   }
 });
 
