@@ -96,6 +96,7 @@ router.post('/register', async (req, res) => {
         email: user.email,
         role: user.role,
         is_verified: user.is_verified,
+        profile_picture: user.profile_picture,
       },
     });
   } catch (error) {
@@ -151,6 +152,7 @@ router.post('/login', async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        profile_picture: user.profile_picture,
       },
     });
   } catch (error) {
@@ -257,6 +259,73 @@ router.post('/upload-profile', authenticate, upload.single('avatar'), async (req
   } catch (err) {
     console.error('Upload error:', err);
     res.status(500).json({ message: 'Failed to upload image' });
+  }
+});
+
+// Change Password Route
+router.post('/change-password', authenticate, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user?.id || req.userId;
+
+    console.log('[Change Password] Request for user:', userId);
+
+    // Validation
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Current password and new password are required' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: 'New password must be at least 8 characters' });
+    }
+
+    if (!userId) {
+      console.error('[Change Password] No user ID found in token');
+      return res.status(401).json({ message: 'User authentication failed' });
+    }
+
+    // Get user from database
+    const userResult = await pool.query(
+      'SELECT id, password FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      console.error('[Change Password] User not found:', userId);
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const user = userResult.rows[0];
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      console.log('[Change Password] Invalid current password for user:', userId);
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    // Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update password in database
+    await pool.query(
+      'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [hashedNewPassword, userId]
+    );
+
+    console.log('[Change Password] Password updated successfully for user:', userId);
+
+    res.json({ 
+      success: true,
+      message: 'Password changed successfully' 
+    });
+  } catch (error) {
+    console.error('[Change Password] Error:', error.message);
+    console.error('[Change Password] Stack:', error.stack);
+    res.status(500).json({ 
+      message: 'Error changing password',
+      detail: error.message 
+    });
   }
 });
 
