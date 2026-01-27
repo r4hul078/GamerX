@@ -53,6 +53,20 @@ function ProductDetails() {
     }
   };
 
+  const handleBuyNow = () => {
+    const added = addToCart(product);
+    if (added) {
+      navigate('/cart');
+    }
+  };
+
+  const handleCheckout = () => {
+    const added = addToCart(product);
+    if (added) {
+      navigate('/cart');
+    }
+  };
+
   const handleAddReview = async (e) => {
     e.preventDefault();
     setReviewLoading(true);
@@ -118,7 +132,7 @@ function ProductDetails() {
             </div>
             <div className="product-details-actions">
               <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}>Add to Cart</button>
-              <button className="buy-now-btn" disabled={product.stock === 0}>Buy Now</button>
+              <button className="buy-now-btn" onClick={handleBuyNow} disabled={product.stock === 0}>Buy Now</button>
             </div>
           </div>
           <div className="reviews-section">
@@ -174,7 +188,7 @@ function ProductDetails() {
               <span className="total-amount">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
             </div>
             <div className="checkout-row">
-              <button className="checkout-btn" disabled={product.stock === 0}>Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout} disabled={product.stock === 0}>Checkout</button>
               <div className="checkout-price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
             </div>
           </div>
