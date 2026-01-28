@@ -17,7 +17,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -196,8 +196,8 @@
   border-top: 1px solid #eee;
 }
 
-.btn-edit,
-.btn-delete {
+.category-actions .btn-edit,
+.category-actions .btn-delete {
   flex: 1;
   padding: 10px 15px;
   border: none;
@@ -207,17 +207,20 @@
   font-weight: 500;
   transition: all 0.3s ease;
 }
-
-.btn-edit {
-  background: var(--accent);
-  color: var(--hero-text);
+.category-actions .btn-edit {
+  background: #667eea;
+  color: white;
 }
 
-.btn-edit:hover {
-  filter: brightness(0.94);
+.category-actions .btn-edit:hover {
+  /* make text darker on hover and lighten background for contrast */
+  background: #e6eefc;
+  color: var(--text-color);
+  filter: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
-.btn-delete {
+.category-actions .btn-delete {
   background: var(--card-bg);
   color: var(--danger);
   border: 1px solid rgba(0,0,0,0.04);
