@@ -189,8 +189,11 @@ function Profile() {
       <div className="profile-hero">
         <div className="profile-card">
           <div className="profile-header">
-            <h1>Profile</h1>
-            <p className="profile-sub">Manage your account</p>
+            <button className="profile-back-btn" onClick={() => navigate(user?.role === 'admin' ? '/admin-dashboard' : '/dashboard')}>← Back</button>
+            <div className="profile-title">
+              <h1>Profile</h1>
+              <p className="profile-sub">Manage your account</p>
+            </div>
           </div>
           <div className="profile-layout">
             <div className="profile-left">
@@ -245,7 +248,6 @@ function Profile() {
 
             <div className="profile-actions">
               <button type="submit" className="gradient-btn" disabled={loading}>{loading ? 'Saving...' : 'Reset Password'}</button>
-              <button type="button" className="continue-shopping-btn" onClick={() => navigate('/dashboard')}>Back to Shop</button>
             </div>
           </form>
         </div>
