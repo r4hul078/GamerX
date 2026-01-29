@@ -157,6 +157,18 @@ function OrderManagement() {
         >
           Shipped ({orders.filter(o => o.status === 'shipped').length})
         </button>
+        <button
+          className={`filter-btn ${filter === 'delivered' ? 'active' : ''}`}
+          onClick={() => setFilter('delivered')}
+        >
+          Delivered ({orders.filter(o => o.status === 'delivered').length})
+        </button>
+        <button
+          className={`filter-btn ${filter === 'cancelled' ? 'active' : ''}`}
+          onClick={() => setFilter('cancelled')}
+        >
+          Cancelled ({orders.filter(o => o.status === 'cancelled').length})
+        </button>
       </div>
 
       <div className="order-container">
