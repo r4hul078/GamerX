@@ -85,22 +85,48 @@ router.post('/confirm-payment/:orderId', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'Invalid confirmation token' });
     }
 
-    // Update payment status to success
-    await pool.query(
-      'UPDATE payments SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE order_id = $2',
-      ['success', orderId]
-    );
+    // Start transaction
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
 
-    // Update order status to confirmed
-    await pool.query(
-      'UPDATE orders SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-      ['confirmed', orderId]
-    );
+      // Update payment status to success
+      await client.query(
+        'UPDATE payments SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE order_id = $2',
+        ['success', orderId]
+      );
 
-    res.json({
-      success: true,
-      message: 'Payment confirmed successfully'
-    });
+      // Update order status to confirmed
+      await client.query(
+        'UPDATE orders SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+        ['confirmed', orderId]
+      );
+
+      // Decrease stock for each product in the order
+      const orderItemsResult = await client.query(
+        'SELECT product_id, quantity FROM order_items WHERE order_id = $1',
+        [orderId]
+      );
+
+      for (const item of orderItemsResult.rows) {
+        await client.query(
+          'UPDATE products SET stock = stock - $1 WHERE id = $2',
+          [item.quantity, item.product_id]
+        );
+      }
+
+      await client.query('COMMIT');
+
+      res.json({
+        success: true,
+        message: 'Payment confirmed successfully'
+      });
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   } catch (error) {
     console.error('Error confirming payment:', error);
     res.status(500).json({ message: 'Error confirming payment' });
