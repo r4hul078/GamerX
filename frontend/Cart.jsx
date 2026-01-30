@@ -5,7 +5,7 @@ const Cart = () => {
   const [cart, setCart] = useState([
     { id: 1, name: "RGB Gaming Mouse", price: 2500 },
     { id: 2, name: "Mechanical Keyboard (Blue Switch)", price: 7800 },
-    { id: 3, name: "7.1 Surround Gaming Headset", price: 5200 },
+    { id: 3, name: "7.1 Surround Gaming Headset", price: 52000 },
     { id: 4, name: "Gaming Mouse Pad XL", price: 1500 },
     { id: 5, name: "PS Controller Charger Dock", price: 3200 },
   ]);

@@ -46,11 +46,11 @@ function CategoryManagement({ onUpdate }) {
       if (editingId) {
         // Update category
         await api.put(`/categories/${editingId}`, formData);
-        setSuccess('Category updated successfully');
+        setSuccess('Category is updated successfully');
       } else {
         // Create category
         await api.post('/categories', formData);
-        setSuccess('Category created successfully');
+        setSuccess('Category is created successfully');
       }
 
       setFormData({ name: '', description: '' });
@@ -59,7 +59,7 @@ function CategoryManagement({ onUpdate }) {
       fetchCategories();
       onUpdate();
     } catch (error) {
-      setError(error.response?.data?.message || 'Error saving category');
+      setError(error.response?.data?.message || 'Error in saving category');
     }
   };
 
