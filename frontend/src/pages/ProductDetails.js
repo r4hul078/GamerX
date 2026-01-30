@@ -25,8 +25,8 @@ function ProductDetails() {
       const response = await api.get(`/products/details/${id}`);
       setProduct(response.data);
     } catch (error) {
-      console.error('Error fetching product details:', error);
-      setError('Failed to load product details');
+      console.error('Error in fetching product details:', error);
+      setError('Failed in loading product details');
     } finally {
       setLoading(false);
     }
