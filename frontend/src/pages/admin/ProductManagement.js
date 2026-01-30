@@ -86,17 +86,17 @@ function ProductManagement({ onUpdate }) {
 
       if (editingId) {
         await api.put(`/products/${editingId}`, submitData);
-        setSuccess('Product updated successfully');
+        setSuccess('Product is updated successfully');
       } else {
         await api.post('/products', submitData);
-        setSuccess('Product created successfully');
+        setSuccess('Product is created successfully');
       }
 
       resetForm();
       fetchProducts();
       onUpdate();
     } catch (error) {
-      setError(error.response?.data?.message || 'Error saving product');
+      setError(error.response?.data?.message || 'Error in saving product');
     }
   };
 
