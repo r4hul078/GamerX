@@ -198,8 +198,7 @@ function Cart({ onLogout, isAuthenticated }) {
                   <input type="radio" name="shipping" />
                   <div>
                     <div className="ship-title">Delivery at home (1-2 days)</div>
-                    <div className="ship-sub">9.90€</div>
-                    <div className="ship-note">Add 45 Glenridge Ave, New York, NY 12220</div>
+                    <div className="ship-sub">FREE</div>
                   </div>
                 </label>
               </div>
