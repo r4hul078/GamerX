@@ -43,7 +43,7 @@ function HomePage() {
       setFeaturedProducts(response.data);
       setFilteredProducts(response.data);
     } catch (error) {
-      console.error('Error fetching featured products:', error);
+      console.error('Error in fetching featured products:', error);
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ function HomePage() {
       const response = await api.get('/products/featured/list', { params: { ...buildFeaturedQuery(), category: categoryName } });
       setFilteredProducts(response.data);
     } catch (error) {
-      console.error('Error filtering products by category:', error);
+      console.error('Error in filtering products by category:', error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ function HomePage() {
       const response = await api.get('/products/featured/list', { params: buildFeaturedQuery() });
       setFilteredProducts(response.data);
     } catch (error) {
-      console.error('Error applying filters:', error);
+      console.error('Error in applying filters:', error);
     } finally {
       setLoading(false);
     }
