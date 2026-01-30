@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import GamerXImage from '../assets/Gamerx.png';
 import './AuthPages.css';
 
 function AdminRegister() {
@@ -66,7 +67,7 @@ function AdminRegister() {
   return (
     <div className="auth-container">
       <div className="auth-left-panel">
-        <div className="image-placeholder" aria-hidden="true"></div>
+        <img src={GamerXImage} alt="GamerX" className="auth-image" />
       </div>
 
       <div className="auth-right-panel admin-panel">
