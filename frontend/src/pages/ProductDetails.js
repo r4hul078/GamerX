@@ -158,6 +158,7 @@ function ProductDetails() {
               </form>
             )}
           </div>
+          </div>
         </div>
         <aside className="product-details-right">
           <div className="summary-panel">

@@ -462,7 +462,6 @@
   color: #e74c3c;
   font-size: 14px;
 }
-
 @media (max-width: 768px) {
   .product-details {
     flex-direction: column;
