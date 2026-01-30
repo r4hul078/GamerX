@@ -398,6 +398,11 @@
   margin-bottom: 24px;
 }
 
+/* Small mappings for Profile.js classes (minimal layout fixes) */
+.profile-modern-main { display: flex; gap: 40px; align-items: flex-start; }
+.profile-modern-sidebar { width: 320px; flex-shrink: 0; }
+.profile-modern-content { flex: 1; }
+
 .receipt-header h2 {
   margin: 0 0 8px 0;
   font-size: 24px;
