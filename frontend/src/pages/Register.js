@@ -90,7 +90,7 @@ function Register() {
             <input
               type="text"
               name="username"
-              placeholder="Choose a username"
+              placeholder="Enter your username"
               value={formData.username}
               onChange={handleChange}
               required
@@ -135,7 +135,7 @@ function Register() {
             />
           </div>
 
-          <button type="submit" className="gradient-btn" disabled={loading} aria-label="Create GamerX account">
+          <button type="submit" className="gradient-btn" disabled={loading} aria-label="Create your GamerX account">
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
