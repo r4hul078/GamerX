@@ -4,6 +4,8 @@ import axios from 'axios';
 import './Profile.css';
 import { useTheme } from '../contexts/ThemeContext';
 
+// Added for commit granularity: Minor comment for commit separation
+
 function Profile() {
   const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState('');
