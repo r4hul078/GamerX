@@ -44,7 +44,7 @@ function AdminDashboard({ onLogout }) {
         lowStockProducts: products.filter((p) => p.stock < 10).length,
       });
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('Error in fetching stats:', error);
     }
   };
 
