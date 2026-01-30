@@ -132,6 +132,7 @@ function ProductDetails() {
             </div>
             <div className="product-details-actions">
               <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}>Add to Cart</button>
+<<<<<<< HEAD
               <button className="buy-now-btn" onClick={handleBuyNow} disabled={product.stock === 0}>Buy Now</button>
             </div>
           </div>
@@ -171,6 +172,10 @@ function ProductDetails() {
                 {reviewError && <div className="review-error">{reviewError}</div>}
               </form>
             )}
+=======
+              <button className="buy-now-btn" disabled={product.stock === 0}>Buy Now</button>
+            </div>
+>>>>>>> a637f54 (Changed product details UI to match cart style)
           </div>
         </div>
         <aside className="product-details-right">
@@ -188,7 +193,11 @@ function ProductDetails() {
               <span className="total-amount">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</span>
             </div>
             <div className="checkout-row">
+<<<<<<< HEAD
               <button className="checkout-btn" onClick={handleCheckout} disabled={product.stock === 0}>Checkout</button>
+=======
+              <button className="checkout-btn" disabled={product.stock === 0}>Checkout</button>
+>>>>>>> a637f54 (Changed product details UI to match cart style)
               <div className="checkout-price">{isNaN(Number(product.price)) ? '-' : `Rs ${Number(product.price).toFixed(2)}`}</div>
             </div>
           </div>

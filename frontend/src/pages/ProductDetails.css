@@ -386,6 +386,7 @@
   font-weight: 700;
 }
 
+<<<<<<< HEAD
 /* Reviews section */
 .reviews-section {
   margin-top: 36px;
@@ -462,6 +463,8 @@
   color: #e74c3c;
   font-size: 14px;
 }
+=======
+>>>>>>> a637f54 (Changed product details UI to match cart style)
 @media (max-width: 768px) {
   .product-details {
     flex-direction: column;

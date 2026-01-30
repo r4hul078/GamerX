@@ -42,7 +42,8 @@ function ProductManagement({ onUpdate }) {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/products');
+      // Fetch all products for all admins
+      const response = await api.get('/products/list/all');
       setProducts(response.data);
       setError('');
     } catch (error) {
