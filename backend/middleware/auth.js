@@ -7,12 +7,12 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Access token required' });
+    return res.status(401).json({ message: 'Access token is required' });
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' });
+      return res.status(403).json({ message: 'Invalid or expired has token' });
     }
     req.user = user;
     req.userId = user.id; // Set userId for backward compatibility
@@ -22,7 +22,7 @@ const authenticateToken = (req, res, next) => {
 
 const authorize = (allowedRoles = []) => (req, res, next) => {
   if (!req.user) {
-    return res.status(401).json({ message: 'Access token required' });
+    return res.status(401).json({ message: 'Access token is required' });
   }
   if (!allowedRoles.length) return next();
   if (!allowedRoles.includes(req.user.role)) {
