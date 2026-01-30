@@ -114,29 +114,39 @@ function HomePage() {
 
   return (
     <div className="home-page">
+
       <div className="home-hero">
-        <div className="hero-content">
-          <h1>🎮 Welcome to GamerX</h1>
-          <p>Your ultimate gaming gear destination</p>
-          <div className="hero-buttons">
-            <button
-              className="btn btn-primary"
-              onClick={() => handleAuthClick('login')}
-            >
-              Login
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => handleAuthClick('register')}
-            >
-              Sign Up
-            </button>
-            <button
-              className="btn btn-admin"
-              onClick={() => handleAuthClick('admin-register')}
-            >
-              Admin Register
-            </button>
+        <div className="hero-image-wrapper">
+          <img
+            className="hero-image"
+            src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
+            alt="Gaming setup"
+          />
+          <div className="hero-overlay">
+            <div className="hero-content">
+              <h1>🎮 Welcome to GamerX</h1>
+              <p>Your ultimate gaming gear destination</p>
+              <div className="hero-buttons">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleAuthClick('login')}
+                >
+                  Login
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => handleAuthClick('register')}
+                >
+                  Sign Up
+                </button>
+                <button
+                  className="btn btn-admin"
+                  onClick={() => handleAuthClick('admin-register')}
+                >
+                  Admin Register
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
